@@ -1,0 +1,56 @@
+services:
+  runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: codeos-runtime:local
+    init: true
+    restart: unless-stopped
+    depends_on:
+      worker:
+        condition: service_started
+    environment:
+      CODELAB_JUDGE_TOKEN: ${CODELAB_JUDGE_TOKEN:?set CODELAB_JUDGE_TOKEN}
+      CODEOS_RUNNER_WORKER_SOCKET: /run/codeos-runner/worker.sock
+    user: "10001:10000"
+    volumes:
+      - codelab_runner_socket:/run/codeos-runner
+    ports:
+      - "127.0.0.1:${CODEOS_RUNTIME_PORT:-18033}:8003"
+    read_only: true
+    tmpfs:
+      - /tmp:size=8m
+    cap_drop: ["ALL"]
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8003/internal/judge/ready', timeout=2)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  worker:
+    image: codeos-runtime:local
+    environment:
+      CODEOS_RUNNER_MODE: worker
+      CODEOS_RUNNER_WORKER_SOCKET: /run/codeos-runner/worker.sock
+    user: "0:0"
+    volumes:
+      - codelab_runner_socket:/run/codeos-runner
+    network_mode: none
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,mode=0711,nosuid,nodev,exec
+    cap_drop: ["ALL"]
+    cap_add: ["CHOWN", "KILL", "SETGID", "SETUID"]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 768m
+    cpus: 1.0
+
+
+volumes:
+  codelab_runner_socket:
