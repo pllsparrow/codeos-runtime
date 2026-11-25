@@ -5,6 +5,12 @@ learning workbench. It runs Python programs and evaluates Go or Python submissio
 against caller-supplied cases. This repository includes the execution service,
 Linux worker, loopback Compose setup, and a synthetic end-to-end example.
 
+## Browser demo
+
+[Try the Python list-copy experiment](https://pllsparrow.github.io/codeos-runtime/).
+Predict which operation changes the original list, compare the results and download
+the Notebook. The page replays output captured from Python during the build.
+
 ## Run locally
 
 Use Docker with Linux containers and Docker Compose v2, OpenSSL, and Python 3
