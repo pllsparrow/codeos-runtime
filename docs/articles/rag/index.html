@@ -1,0 +1,29 @@
+<!doctype html><html lang="zh-CN"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>检索、生成与评估 · CodeOS</title><link rel="stylesheet" href="/codeos-runtime/style.css"/></head><body><header><nav aria-label="站点导航"><a class="brand" href="/codeos-runtime/">CodeOS</a><a href="/codeos-runtime/#articles">学习笔记</a><a href="https://github.com/pllsparrow/codeos-runtime">GitHub</a></nav></header><main><div class="article-title"><a href="/codeos-runtime/#articles">← 学习笔记</a><h1>RAG：检索、生成与评估</h1><p class="intro">沿着证据链定位失败：文档、召回、重排、上下文与回答。</p></div><div class="reading"><nav class="toc" aria-label="文章目录"><strong>文章目录</strong><ul><li><a href="#section-0">RAG 的定义</a></li><li><a href="#section-1">处理链路</a></li><li><a href="#section-2">Embedding、关键词与重排</a></li><li><a href="#section-3">评估与常见误区</a></li><li><a href="#section-4">认知模型：证据流与决策流</a></li><li><a href="#section-5">检索组件各解决什么问题</a></li><li><a href="#section-6">把失败归因到可观察的一层</a></li><li><a href="#section-7">更新、权限与可信度</a></li><li><a href="#section-8">简答与面试回答参考</a></li><li><a href="#section-9">延伸阅读</a></li></ul></nav><article><h2 id="section-0">RAG 的定义</h2>
+<p>Retrieval-Augmented Generation（检索增强生成）在生成答案前或过程中，先取得相关外部资料，将其作为模型上下文。它改变推理时可见的信息，并不自动改变模型参数；与 fine-tuning（微调）的作用不同。</p>
+<h2 id="section-1">处理链路</h2>
+<p>离线阶段通常包含文档清洗、切分、元数据和索引；在线阶段包含查询处理、检索、可选 reranking（重排）、上下文组装与回答。Chunk 的大小与重叠需要兼顾语义完整性、检索粒度与上下文预算。</p>
+<h2 id="section-2">Embedding、关键词与重排</h2>
+<p>Embedding 将内容表示为向量，以相似度寻找语义相关资料；关键词检索擅长精确术语和编号。混合检索组合不同信号；重排对候选进行更细的相关性判断。相似度高不代表事实正确、资料新或调用者有权限读取。</p>
+<h2 id="section-3">评估与常见误区</h2>
+<p>检索评估关注正确资料是否进入候选及排序；回答评估关注是否基于证据、是否完整、引用是否支持结论。无相关证据时应表达缺失，不能用无关引用装饰答案。权限过滤与来源更新时间也影响可用性。</p>
+<h2 id="section-4">认知模型：证据流与决策流</h2>
+<p>RAG（Retrieval-Augmented Generation，检索增强生成）把外部证据接入生成过程。它有离线/增量索引链和在线问答链：前者决定什么可被找回，后者决定本次查询实际拿到什么、交给模型什么以及如何表述答案。模型会流畅回答，不代表证据链完整。</p>
+<pre><code class="language-text">documents -&gt; parse -&gt; chunks + metadata -&gt; embedding / search index
+query -&gt; candidate retrieval -&gt; fusion / reranking -&gt; selected context
+                                                     -&gt; answer + citations
+</code></pre>
+<p>Chunk（片段）是检索与组装上下文的单元，document（文档）是来源与语义组织单元，两者不一定一一对应。Metadata（元数据）记录来源、版本、时间和访问范围；没有元数据的高相似度片段，可能来自过期文档或无权限材料。</p>
+<h2 id="section-5">检索组件各解决什么问题</h2>
+<p>Dense retrieval（稠密检索）用 embedding（向量表示）寻找表示空间中的近邻，适合捕捉某些语义关系；sparse retrieval（稀疏检索）利用词项特征，常有利于精确词、编号和术语。相似度不是事实正确率，也不是相关概率。</p>
+<p>Hybrid retrieval（混合检索）组合不同候选来源。RRF（Reciprocal Rank Fusion，倒数排名融合）根据排名融合，不要求不同搜索器分数处在同一尺度；reranker（重排器）重新评估候选与查询的匹配。重排不能找回根本没有进入候选集的关键文档。</p>
+<p>Chunking（分块）存在权衡：过小可能割裂定义与条件，过大可能引入噪声、挤占上下文。Overlap（重叠）减少边界割裂，但也增加重复和索引成本。适合代码、表格或长文的分块策略可能不同，不能只选一个字符数当作通用答案。</p>
+<h2 id="section-6">把失败归因到可观察的一层</h2>
+<table><thead><tr><th>结果</th><th>先检查</th></tr></thead><tbody><tr><td>文档完全找不到</td><td>是否成功解析/索引、版本和过滤条件</td></tr><tr><td>候选不相关</td><td>查询表达、搜索器与候选召回数量</td></tr><tr><td>候选有证据但上下文没有</td><td>融合、重排、截断和去重策略</td></tr><tr><td>上下文有证据但答案错误</td><td>条件理解、生成约束、引用与忠实度</td></tr><tr><td>回答了没有证据的问题</td><td>无证据时的拒答、澄清和外推边界</td></tr></tbody></table>
+<p>Retrieval recall（检索召回）衡量需要的证据是否进入候选；answer faithfulness（答案忠实度）关注回答是否由给定证据支持；answer correctness（答案正确性）还需要对照问题与真实答案。仅检查答案是否包含引用链接不足以证明它引用得对。</p>
+<h2 id="section-7">更新、权限与可信度</h2>
+<p>来源变更后，要让新版本进入索引并处理旧片段；否则“最新页面”与“检索到的缓存”会冲突。权限过滤必须作用于候选获取和上下文选择，不能只在最终界面隐藏链接。检索文档是证据，不应变成修改系统行为的指令。</p>
+<p><strong>面试回答：RAG 能消除幻觉吗？</strong> 它增加可追溯证据，但仍受解析质量、召回、上下文选择和生成忠实度影响。应通过包含有答案、无答案、过期与冲突来源的代表性查询集分别评估各环节，结合 <a href="/codeos-runtime/articles/agents/">Agent 执行边界</a> 讨论工具和权限。</p>
+<h2 id="section-8">简答与面试回答参考</h2>
+<p><strong>答案不准确时为什么先查检索？</strong> 模型可能根本没看到需要的证据。应分别定位资料、切分、召回、排序、上下文和生成，避免把所有失败归结为 prompt。</p>
+<h2 id="section-9">延伸阅读</h2>
+<p><a href="https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview">Microsoft：RAG 概览</a></p><aside class="related" aria-label="继续阅读"><h2>继续阅读</h2><a href="/codeos-runtime/examples/rag/">查看 RAG 检索与引用示例</a><a href="/codeos-runtime/articles/agents/">Agent：模型、工具与状态</a><a href="/codeos-runtime/#articles">返回文章列表</a></aside></article></div></main></body></html>

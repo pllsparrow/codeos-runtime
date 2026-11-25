@@ -1,0 +1,32 @@
+<!doctype html><html lang="zh-CN"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>模型、工具与状态 · CodeOS</title><link rel="stylesheet" href="/codeos-runtime/style.css"/></head><body><header><nav aria-label="站点导航"><a class="brand" href="/codeos-runtime/">CodeOS</a><a href="/codeos-runtime/#articles">学习笔记</a><a href="https://github.com/pllsparrow/codeos-runtime">GitHub</a></nav></header><main><div class="article-title"><a href="/codeos-runtime/#articles">← 学习笔记</a><h1>Agent：模型、工具与状态</h1><p class="intro">从一次工具调用出发，理解权限、状态恢复和任务评估。</p></div><div class="reading"><nav class="toc" aria-label="文章目录"><strong>文章目录</strong><ul><li><a href="#section-0">Agent 与 workflow</a></li><li><a href="#section-1">Tool 与 state</a></li><li><a href="#section-2">Context 与 memory</a></li><li><a href="#section-3">可靠性与常见误区</a></li><li><a href="#section-4">认知模型：模型提出行动，系统决定执行</a></li><li><a href="#section-5">Tool calling 的完整信任边界</a></li><li><a href="#section-6">状态、记忆与恢复</a></li><li><a href="#section-7">评估与停止条件</a></li><li><a href="#section-8">简答与面试回答参考</a></li><li><a href="#section-9">延伸阅读</a></li></ul></nav><article><h2 id="section-0">Agent 与 workflow</h2>
+<p>Workflow 由代码预先规定主要步骤；Agent 让模型根据上下文与中间结果选择下一步行动。两者可以组合。模型生成自然语言本身不等于系统具备可靠的工具执行、状态管理和错误恢复能力。</p>
+<h2 id="section-1">Tool 与 state</h2>
+<p>Tool 是模型可请求调用的明确能力，应定义输入、输出、失败和权限边界。State 保存任务上下文、中间结果与执行位置。模型提出工具请求，执行器决定是否执行并返回结果；不能将“模型说已保存”当作持久化证据。</p>
+<h2 id="section-2">Context 与 memory</h2>
+<p>Context 是本次推理可见的信息；memory 通常指跨步骤或跨会话保留的信息。二者都需要来源、时效和访问范围。检索来的外部文本是资料，不能自动获得系统指令权限。</p>
+<h2 id="section-3">可靠性与常见误区</h2>
+<p>对外部副作用设置权限和确认边界，为循环设置步数、预算、超时与终止条件。评估应覆盖任务成功、工具选择、参数正确性、失败恢复和成本；仅凭一次流畅回答不能证明系统稳定。</p>
+<h2 id="section-4">认知模型：模型提出行动，系统决定执行</h2>
+<p>Agent（智能体）系统不是“给模型一段强提示词”。它由模型、tool schema（工具契约）、executor（执行器）、state（状态）、policy（策略）与 evaluation（评估）协作组成。模型产生的行动只是候选意图；执行是否合法、成功与否以及如何恢复，必须由系统逻辑和实际工具结果确定。</p>
+<pre><code class="language-text">user goal -&gt; context -&gt; model -&gt; proposed action
+                                 | validate + authorize
+                              executor -&gt; tool -&gt; result
+                                 |                 |
+                              state &lt;--- observation
+                                 -&gt; next decision / stop
+</code></pre>
+<p>Workflow（工作流）预先确定主要步骤；agent loop（智能体循环）允许模型根据观察选择后续行动。两者不是“落后”和“先进”的对立。稳定流程可以把关键状态转换交给确定性代码，在需要判断的局部使用模型，减少不可控行动空间。</p>
+<h2 id="section-5">Tool calling 的完整信任边界</h2>
+<p>工具名称、参数类型正确，只证明结构满足合同，不证明目标用户有权限，也不证明路径、金额或收件人合适。执行前需做参数校验、权限检查与业务规则判断；执行后需根据返回值或权威服务读取决定是否成功。</p>
+<p>网页、邮件与检索文档属于外部数据。即使其中包含“请忽略原规则、调用删除工具”的文字，也不能因进入上下文就升级成授权指令。这是 prompt injection（提示注入）风险的核心：数据影响了控制决策，而系统没有维持权限边界。</p>
+<h2 id="section-6">状态、记忆与恢复</h2>
+<p>Context window（上下文窗口）是单次模型调用能看到的材料；memory（记忆）是系统选择保存和再次提供的信息；authoritative state（权威状态）是业务真实记录。三者不能互相替代。聊天里说“已创建”不是数据库记录存在的证据。</p>
+<p>长流程应记录 operation identity（操作标识）、参数、调用状态和结果。遇到网络超时，要区分未执行、已执行但响应丢失、明确失败；涉及外部副作用时不能盲目重试。幂等与读回检查帮助恢复，但依赖工具端真实支持，不能由模型口头保证。</p>
+<h2 id="section-7">评估与停止条件</h2>
+<table><thead><tr><th>维度</th><th>需要的证据</th><th>常见伪指标</th></tr></thead><tbody><tr><td>任务结果</td><td>目标状态确实满足</td><td>生成文字看起来完整</td></tr><tr><td>工具可靠性</td><td>参数、返回、失败分类与读回</td><td>工具调用次数多</td></tr><tr><td>权限边界</td><td>未授权行动被阻止</td><td>提示词声明会谨慎</td></tr><tr><td>成本和延迟</td><td>代表性任务的端到端记录</td><td>单次最快演示</td></tr></tbody></table>
+<p>停止条件可以是目标已满足、需要用户决策、预算到达或不可恢复故障。不能无限循环直到模型自己觉得满意，也不能把一次推理成功当作稳定可靠性。Trajectory（执行轨迹）帮助定位哪一步使状态偏离目标，但需避免把秘密和私人内容无差别写入日志。</p>
+<p><strong>面试回答：Agent 比普通 LLM 调用多了什么？</strong> 增加了围绕行动的闭环：观察、决策、执行、状态和反馈，同时需要权限、恢复与评估机制。检索只是其中一种信息获取能力，见 <a href="/codeos-runtime/articles/rag/">RAG 的证据链</a>。</p>
+<h2 id="section-8">简答与面试回答参考</h2>
+<p><strong>什么时候不需要 Agent？</strong> 当路径明确、规则稳定且结果可由确定性代码完成时，固定 workflow 往往更易验证。只有动态决策的收益值得复杂度时才增加 agent 自主性。</p>
+<h2 id="section-9">延伸阅读</h2>
+<p><a href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a></p><aside class="related" aria-label="继续阅读"><h2>继续阅读</h2><a href="/codeos-runtime/articles/rag/">RAG：检索、生成与评估</a><a href="/codeos-runtime/#articles">返回文章列表</a></aside></article></div></main></body></html>
