@@ -1,0 +1,65 @@
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --learning-bg: #0f0f0f; --learning-surface: #181818; --learning-muted-surface: #121212;
+  --learning-border: #414141; --learning-text: #f1f1f1; --learning-muted: #aaaaaa;
+  --learning-teal: #e5e5e5; --learning-teal-soft: #303030;
+  --learning-blue: #e5e5e5; --learning-blue-soft: #272727;
+  --learning-gold: #d2bb87; --learning-gold-soft: #413c2e;
+  background: var(--learning-bg); color: var(--learning-text);
+}
+:root[data-theme="dark"] .learning-shell { color: var(--learning-text); }
+:root[data-theme="dark"] :is(.product-header, .workspace-chip, .subject-card, .foundation-card, .selected-question-set, .child-sidebar, .child-content, .learning-rail, .learning-paths section, .lesson-stages, .mentor-message) { background: var(--learning-surface); border-color: var(--learning-border); color: var(--learning-text); }
+:root[data-theme="dark"] :is(.product-header nav a, .workspace-chip, .foundation-card-footer small, .lesson-entry small, .lesson-stage-actions small, .lesson-breadcrumb, .lesson-evidence-summary, .child-muted, .child-empty, .prep-clock, .child-list-button small, .mentor-context > p, .learning-direction-disclaimer, .learning-next small, .learning-profile small, .learning-direction-heading p, .mentor-message details, .mentor-sources small) { color: var(--learning-muted); }
+:root[data-theme="dark"] :is(.product-header nav a.active, .product-header nav a:hover, .subject-tabs button[aria-pressed="true"], .learning-tools a, .subject-links a, .path-action, .learning-paths button, .child-list-button.active, .child-list-button:hover, .mentor-message.user) { color: var(--learning-teal); background: var(--learning-teal-soft); border-color: var(--learning-border); }
+:root[data-theme="dark"] :is(.learning-paths, .learning-paths h2, .lesson-stage h3, .child-heading, .child-sidebar-title h2, .child-history-title, .prep-question legend, .learning-next strong, .learning-profile strong, .learning-direction-label, .mentor-composer label, .foundation-card h3, .foundation-card-footer strong) { color: var(--learning-text); }
+:root[data-theme="dark"] :is(.learning-direction, .mentor-context, .mentor-review, .lesson-teaching, .child-list-button, .foundation-card.unavailable) { background: var(--learning-muted-surface); border-color: var(--learning-border); color: var(--learning-text); }
+:root[data-theme="dark"] :is(.learning-paths input, .learning-paths textarea, .learning-profile textarea, .prep-question textarea, .prep-review textarea, .prep-review input, .prep-review select, .mentor-context select, .mentor-sources input, .mentor-composer textarea, .subject-tabs button, .child-actions a, .child-sidebar-title button, .mentor-review button, .learning-direction-heading button) { background: var(--learning-muted-surface); border-color: var(--learning-border); color: var(--learning-text); }
+:root[data-theme="dark"] :is(.lesson-stage, .lesson-entry, .learning-next > a, .learning-profile label, .prep-question, .prep-attempt > article, .prep-review > article, .lesson-repair, .learning-direction-grid, .learning-paths article, .foundation-related) { border-color: var(--learning-border); }
+:root[data-theme="dark"] :is(.lesson-primary, .child-primary) { color: #0f0f0f; background: #e5e5e5; border-color: #e5e5e5; }
+:root[data-theme="dark"] .learning-paths .lesson-stages button[aria-current="step"] { background: #303030; color: #f1f1f1; }
+:root[data-theme="dark"] .lesson-stages button[aria-current="step"] .lesson-stage-number { color: #0f0f0f; background: #e5e5e5; border-color: #e5e5e5; }
+:root[data-theme="dark"] :is(.child-error, .learning-paths [role="alert"], .foundation-error) { color: #efb5a4; background: #3a2824; border-color: #785048; }
+:root[data-theme="dark"] .learning-priority.focus { color: #efb5a4; background: #3a2824; }
+:root[data-theme="dark"] .learning-priority.reinforce { color: #e5e5e5; background: #272727; }
+:root[data-theme="dark"] .learning-priority.inspect { color: #d2bb87; background: #413c2e; }
+
+/* Reading surfaces retain a distinct canvas, navigation and paper in both modes. */
+:root[data-theme="dark"] .notes-workspace {
+  --notes-ink: #f1f1f1; --notes-muted: #aaaaaa; --notes-border: #414141;
+  --notes-green: #e5e5e5; --notes-green-soft: #303030;
+  --notes-violet: #e5e5e5; --notes-violet-soft: #303030;
+  --notes-blue: #e5e5e5; --notes-blue-soft: #272727;
+  --notes-amber: #e2c38a; --notes-amber-soft: #3d3526;
+  --notes-editor-ink: #f1f1f1; --notes-editor-bg: #1f1f1f;
+  background: #0f0f0f;
+}
+:root[data-theme="dark"] .notes-navigation { background: #121212; border-color: #414141; }
+:root[data-theme="dark"] .notes-library { background: #181818; border-color: #414141; }
+:root[data-theme="dark"] .notes-main { --notes-ink: #f1f1f1; --notes-muted: #aaaaaa; --notes-border: #414141; background: #0f0f0f; }
+:root[data-theme="dark"] .notes-document { color: #f1f1f1; background: #1f1f1f; border-color: #3f3f3f; box-shadow: 0 4px 20px #0000001f; }
+:root[data-theme="dark"] .notes-outline { background: #181818; color: #aaaaaa; border-color: #414141; }
+:root[data-theme="dark"] :is(.notes-nav-heading h1, .notes-library-heading h2, .notes-note-row strong, .notes-document h1, .notes-document h2, .notes-document h3, .notes-document h4, .notes-document h5, .notes-document h6, .notes-document th, .notes-modal h2, .notes-collection-title, .notes-chapter-select) { color: #f1f1f1; border-color: #3f3f3f; }
+:root[data-theme="dark"] :is(.notes-note-meta, .notes-nav-heading a, .notes-document-header p, .notes-save-state, .notes-outline a, .notes-outline strong, .notes-outline li[data-level="1"] > a, .notes-outline li[data-level="2"] > a, .notes-document .notes-document-header h2, .notes-document .notes-document-header p, .notes-reading-badge, .notes-document .notes-reading-badge, .notes-list-heading, .notes-pagination, .notes-library-heading > span, .notes-chapter-heading, .notes-collection-title small, .notes-chapter-select small, .notes-collection-shortcuts small) { color: #aaaaaa; }
+:root[data-theme="dark"] :is(.notes-workspace button, .notes-workspace input, .notes-workspace select, .notes-mode-link, .notes-document .notes-mode-link, .notes-document-more summary, .notes-more-panel, .notes-modal, .notes-edit-metadata, .notes-collection-number, .notes-library .notes-search) { background: #303030; color: #f1f1f1; border-color: #3f3f3f; }
+:root[data-theme="dark"] :is(.notes-collection-title, .notes-chapter-select, .notes-collection-toggle, .notes-collection-shortcuts button, .notes-note-list .notes-note-row, .notes-sort-options button) { background: transparent; }
+:root[data-theme="dark"] .notes-workspace button:hover:not(:disabled), :root[data-theme="dark"] .notes-mode-link:hover, :root[data-theme="dark"] .notes-document .notes-mode-link:hover { color: #ffffff; background: #3f3f3f; border-color: #717171; }
+:root[data-theme="dark"] :is(.notes-note-list .notes-note-row.active, .notes-chapters button.active, .notes-collection.current .notes-collection-number, .notes-workspace .notes-sort-options button[aria-pressed="true"]) { color: #f1f1f1; background: #303030; border-color: #888888; }
+:root[data-theme="dark"] .notes-note-list .notes-note-row.active { box-shadow: inset 2px 0 #888888; }
+:root[data-theme="dark"] .notes-note-row.active strong, :root[data-theme="dark"] .notes-document a, :root[data-theme="dark"] .notes-outline a:hover { color: #f1f1f1; }
+:root[data-theme="dark"] :is(.notes-document-header, .notes-collection, .notes-note-list .notes-note-row, .notes-pagination, .notes-document td, .notes-document th) { border-color: #414141; }
+:root[data-theme="dark"] :is(.notes-document pre, .notes-document .notes-live-source-block) { background: #151515; color: #f1f1f1; }
+:root[data-theme="dark"] .notes-document pre code, :root[data-theme="dark"] .notes-document :not(pre) > code { color: #f1f1f1; }
+:root[data-theme="dark"] .notes-document :not(pre) > code { background: #303030; }
+:root[data-theme="dark"] .notes-document th { background: #303030; }
+:root[data-theme="dark"] .notes-document tbody tr:nth-child(even) { background: #242424; }
+:root[data-theme="dark"] .notes-document blockquote, :root[data-theme="dark"] .notes-document .notes-live-quote { color: #bcbcbc; border-color: #888888; }
+:root[data-theme="dark"] .notes-workspace button.notes-primary, :root[data-theme="dark"] .notes-nav-actions button:first-child { color: #0f0f0f; background: #e5e5e5; border-color: #e5e5e5; }
+:root[data-theme="dark"] .notes-workspace button.notes-danger, :root[data-theme="dark"] .notes-error { color: #efb5a4; background: #3a2824; border-color: #785048; }
+:root[data-theme="dark"] .notes-notice { color: #e2c38a; background: #3d3526; border-color: #806b44; }
+:root[data-theme="dark"] .notes-source-editor .cm-editor, :root[data-theme="dark"] .notes-source-editor .cm-content { color: #f1f1f1; background: #1f1f1f; caret-color: #f1f1f1; }
+:root[data-theme="dark"] .notes-source-editor .cm-selectionBackground, :root[data-theme="dark"] .notes-source-editor .cm-editor.cm-focused .cm-selectionBackground { background: #515151; }
+:root[data-theme="dark"] .notes-source-editor .cm-cursor { border-left-color: #f1f1f1; }
+:root[data-theme="dark"] .notes-modal-backdrop { background: #08080899; }
+:root[data-theme="dark"] ::selection { background: #515151; color: #ffffff; }
+@media (max-width: 980px) { .product-header { gap: 18px; padding-inline: 16px; flex-wrap: wrap; } .theme-control + .workspace-chip { display: none; } }
+@media (max-width: 600px) { .theme-control button span { display: none; } .product-header { gap: 10px; } .theme-control button { padding: 6px; } .product-header nav a { min-width: 58px; padding-inline: 9px; } }

@@ -1,0 +1,186 @@
+/* Typing workspaces use compact chrome and distinct, softly joined surfaces. */
+.immersive-codelab { background:var(--codeos-bg); }
+.typing-brand { flex-shrink:0; color:var(--codeos-ink); text-decoration:none; font-size:15px; font-weight:750; letter-spacing:-.6px; padding:5px 8px; border-radius:8px; }
+.typing-directory-toggle { display:inline-flex; align-items:center; justify-content:center; gap:7px; flex-shrink:0; min-height:30px; padding:0 9px; border:1px solid transparent; border-radius:8px; background:transparent; color:var(--codeos-muted); cursor:pointer; font:inherit; font-size:12px; }
+.typing-brand:hover,.typing-directory-toggle:hover,.typing-directory-toggle[aria-expanded="true"] { background:var(--codeos-soft); color:var(--codeos-ink); }
+.immersive-codelab :is(button,a,summary):focus-visible { outline:2px solid var(--codeos-accent); outline-offset:2px; }
+.immersive-codelab .lesson-context { min-width:0; min-height:0; padding:0; border:0; background:transparent; margin-left:auto; font-size:11px; }
+.immersive-codelab .lesson-context > span,.immersive-codelab .lesson-context > small { display:none; }
+.immersive-codelab .lesson-context > span:only-child,.immersive-codelab .lesson-context > span:has(+button) { display:block; }
+
+/* OJ: one workbar, with independently rounded reading/code/console panes. */
+.immersive-codelab .oj-workspace { grid-template-columns:0 var(--acm-details-width) 10px minmax(300px,1fr); grid-template-rows:42px minmax(0,1fr); padding:0 8px 8px; column-gap:0; row-gap:4px; background:var(--codeos-bg); }
+.immersive-codelab .oj-workspace-header { padding:0 2px; gap:8px; border:0; background:transparent; }
+.oj-workspace-header .oj-map-link { font-size:11px; padding:5px 8px; border-radius:8px; }
+.oj-workspace-header .oj-current-problem { gap:9px; margin-left:5px; }
+.oj-workspace-header .oj-current-problem strong { font-size:12px; font-weight:550; }
+.oj-workspace-header .acm-header-actions { gap:3px; margin-left:auto; }
+.oj-workspace-header .acm-icon-button { width:28px; height:28px; border-radius:8px; }
+.immersive-codelab .oj-description-column,.immersive-codelab .oj-code-surface,.immersive-codelab .oj-feedback-panel { border:1px solid var(--codeos-border); border-radius:14px; background:var(--codeos-surface); box-shadow:0 2px 5px #00000004; }
+.immersive-codelab .oj-description-column { overflow:hidden; }
+.immersive-codelab .oj-section-header,.immersive-codelab .oj-code-header { min-height:40px; padding:0 14px; background:transparent; }
+.immersive-codelab .oj-section-header { flex-shrink:0; }
+.immersive-codelab .oj-description-scroll { padding:24px 24px 40px; scrollbar-gutter:stable; }
+.immersive-codelab .oj-problem-intro h1 { font-size:24px; }
+.immersive-codelab .oj-description-column :is(.acm-detail-section pre,.oj-example > div) { border-radius:11px; }
+.immersive-codelab .oj-workspace .acm-editor-column { background:transparent; min-height:0; overflow:visible; }
+.oj-code-surface { min-height:0; flex:1; display:flex; flex-direction:column; position:relative; }
+.immersive-codelab .oj-code-header { border-radius:14px 14px 0 0; }
+.immersive-codelab .oj-workspace .acm-code-editor { min-height:110px; overflow:hidden; border-radius:0 0 14px 14px; }
+.immersive-codelab .oj-workspace .acm-code-statusbar { min-height:26px; font-size:10px; }
+.immersive-codelab .oj-code-header button { min-height:28px; border-radius:8px; }
+.immersive-codelab .oj-workspace > .acm-resize-handle,.immersive-codelab .oj-feedback-resizer { position:relative; background:transparent; }
+.immersive-codelab .oj-workspace > .acm-resize-handle::after { content:''; position:absolute; top:calc(50% - 20px); left:4px; width:2px; height:40px; border-radius:4px; background:var(--codeos-border); }
+.immersive-codelab .oj-feedback-resizer { height:8px; min-height:8px; }
+.immersive-codelab .oj-feedback-resizer::after { content:''; position:absolute; top:3px; left:calc(50% - 20px); height:2px; width:40px; border-radius:4px; background:var(--codeos-border); }
+.immersive-codelab :is(.acm-resize-handle,.oj-feedback-resizer):is(:hover,:focus-visible)::after { background:var(--codeos-accent); }
+.immersive-codelab .oj-feedback-panel { overflow:hidden; flex-shrink:0; }
+.immersive-codelab .oj-feedback-panel.is-collapsed { height:40px; min-height:40px; flex:0 0 40px; margin-top:8px; }
+.immersive-codelab .oj-feedback-tabs { min-height:38px; gap:1px; padding:0 8px; align-items:center; }
+.immersive-codelab .oj-feedback-tabs > button { min-height:28px; padding:0 9px; border:0; border-radius:7px; }
+.immersive-codelab .oj-feedback-tabs > button[aria-selected="true"] { background:var(--codeos-soft); }
+.immersive-codelab .oj-feedback-tabs > .oj-console-toggle { padding:0; width:28px; display:grid; place-items:center; flex-shrink:0; }
+.immersive-codelab .oj-feedback-content[hidden] { display:none; }
+.oj-directory-backdrop { position:absolute; inset:46px 0 0; z-index:10; border:0; background:#00000018; }
+.immersive-codelab .oj-workspace .acm-problem-sidebar { position:absolute; z-index:11; top:46px; left:8px; bottom:8px; width:310px; border:1px solid var(--codeos-border); border-radius:14px; overflow:hidden; box-shadow:0 10px 35px #00000020; background:var(--codeos-surface); }
+.immersive-codelab .oj-workspace .acm-problem-sidebar.collapsed { display:none; }
+
+/* Jupy: reveal the notebook directory when needed, keep tools to one line. */
+.immersive-codelab .immersive-lab { grid-template-columns:minmax(0,1fr); grid-template-rows:42px minmax(0,1fr); grid-template-areas:'bar' 'editor'; padding:0 8px 8px; gap:4px 8px; background:var(--codeos-bg); }
+.lab-workbar { grid-area:bar; min-width:0; display:flex; align-items:center; gap:10px; padding:0 2px; }
+.lab-workbar-title { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--codeos-muted); font-size:12px; }
+.immersive-codelab .immersive-lab > :is(.lab-folder-pane,.lab-notes-pane) { display:none; }
+.immersive-codelab .immersive-lab.directory-open { grid-template-columns:280px minmax(0,1fr); grid-template-rows:42px minmax(120px,.7fr) minmax(0,1.3fr); grid-template-areas:'bar bar' 'folders editor' 'notes editor'; row-gap:0; }
+.immersive-codelab .immersive-lab.directory-open > :is(.lab-folder-pane,.lab-notes-pane) { display:block; padding:14px 10px; border:1px solid var(--codeos-border); border-radius:14px; }
+.immersive-codelab .immersive-lab > .lab-workspace { border:1px solid var(--codeos-border); border-radius:14px; position:relative; scrollbar-gutter:stable; background:var(--codeos-surface); }
+.immersive-lab .notebook-toolbar { display:flex; align-items:center; gap:12px; min-height:44px; padding:0 12px; border-bottom:1px solid var(--codeos-border); box-shadow:none; border-radius:14px 14px 0 0; }
+.immersive-lab .notebook-toolbar .lab-toolbar-leading { flex:1; min-width:50px; min-height:0; padding:0; border:0; background:transparent; }
+.immersive-lab .lab-toolbar-leading .lab-file > svg,.immersive-lab .lab-toolbar-leading .lab-file > span:first-of-type { display:none; }
+.immersive-lab .lab-title-save-state { margin-left:0; font-size:11px; }
+.immersive-lab .notebook-toolbar .lab-toolbar-actions { min-height:42px; flex-wrap:nowrap; padding:0; margin-left:auto; }
+.immersive-lab .notebook-toolbar .lab-icon-button { border-radius:8px; }
+.immersive-lab .lab-cell-list { width:min(100% - 40px,1000px); margin:28px auto 0; }
+.immersive-lab .lab-cell { border-radius:0; overflow:visible; margin-bottom:24px; }
+.lab-mentor-link { display:inline-block; margin:8px 12px; color:var(--codeos-accent,#347552); text-underline-offset:3px; font-size:13px; }
+.lab-mentor-link:focus-visible { outline:2px solid var(--codeos-accent,#347552); outline-offset:3px; }
+.immersive-lab .lab-add-cell { width:min(100% - 40px,1000px); margin:16px auto 44px; }
+.immersive-lab .lab-menu-help { font-size:11px; line-height:1.6; color:var(--codeos-muted); margin:9px 7px 2px; padding-top:9px; border-top:1px solid var(--codeos-border); }
+.immersive-lab .workbench-menu { position:relative; }
+.immersive-lab .workbench-menu summary { list-style:none; cursor:pointer; display:grid; place-items:center; width:30px; height:30px; border-radius:8px; color:var(--codeos-muted); }
+.immersive-lab .workbench-menu summary::-webkit-details-marker { display:none; }
+.immersive-lab .workbench-menu[open] summary,.immersive-lab .workbench-menu summary:hover { background:var(--codeos-soft); color:var(--codeos-ink); }
+.immersive-lab .workbench-menu-panel { position:absolute; top:calc(100% + 7px); right:0; z-index:35; width:235px; max-height:65vh; overflow:auto; padding:7px; border:1px solid var(--codeos-border); border-radius:12px; background:var(--codeos-surface); box-shadow:0 10px 30px #00000020; }
+.immersive-lab .notebook-toolbar .workbench-menu-panel > button { display:flex; width:100%; height:32px; gap:9px; padding:0 9px; align-items:center; justify-content:flex-start; font-size:12px; text-align:left; }
+.immersive-lab .workbench-menu-panel > button::after { content:attr(aria-label); }
+.immersive-lab .workbench-menu-panel > .lab-text-action::after { content:none; }
+.immersive-lab .workbench-menu-panel .lab-toolbar-divider { display:block; width:100%; height:1px; margin:6px 0; background:var(--codeos-border); }
+@media(max-width:1100px) {
+  .immersive-codelab .immersive-lab.directory-open { grid-template-columns:250px minmax(0,1fr); }
+  .immersive-lab.directory-open .runtime-indicator { display:none; }
+  .oj-workspace-header .oj-current-problem { display:none; }
+}
+@media(max-width:800px) {
+  .immersive-codelab .immersive-lab.directory-open { grid-template-columns:minmax(0,1fr); grid-template-areas:'bar' 'folders' 'notes'; }
+  .immersive-lab.directory-open > .lab-workspace { display:none; }
+  .immersive-lab .runtime-indicator { display:none; }
+}
+@media(max-width:760px) {
+  .immersive-codelab .oj-workspace { display:flex; flex-direction:column; height:auto; min-height:100dvh; overflow:visible; padding:0 6px 6px; gap:6px; }
+  .immersive-codelab .oj-workspace-header { min-height:38px; padding:0; }
+  .oj-workspace-header .oj-map-link { font-size:0; padding:5px; }
+  .oj-workspace-header .oj-map-link svg { width:16px; }
+  .immersive-codelab .oj-description-column { max-height:38dvh; min-height:200px; flex:none; }
+  .immersive-codelab .oj-workspace .acm-editor-column { min-height:65dvh; height:auto; flex:none; }
+  .immersive-codelab .oj-code-surface { min-height:45dvh; }
+  .immersive-codelab .oj-workspace .acm-code-editor { height:auto; flex:1; min-height:230px; }
+  .immersive-codelab .oj-feedback-panel.is-open { height:300px; max-height:none; min-height:180px; flex-basis:auto; margin-top:8px; }
+  .immersive-codelab .oj-description-scroll { padding:20px; }
+  .immersive-codelab .oj-workspace .acm-problem-sidebar { position:fixed; top:44px; left:6px; bottom:6px; width:min(330px,calc(100vw - 12px)); max-height:none; }
+  .oj-directory-backdrop { position:fixed; top:44px; }
+  .immersive-codelab .lesson-context { font-size:10px; }
+  .immersive-lab .lab-cell-list,.immersive-lab .lab-add-cell { width:calc(100% - 20px); }
+}
+
+.immersive-lab .lab-type-picker summary { width:auto; gap:6px; display:flex; padding:0 8px; font-size:11px; text-transform:capitalize; }
+.immersive-lab .lab-type-picker .workbench-menu-panel { width:160px; }
+.immersive-lab .lab-type-picker .workbench-menu-panel > button { text-transform:capitalize; }
+.immersive-lab .lab-type-picker .workbench-menu-panel > button::after { content:none; }
+.immersive-lab .lab-type-picker button[aria-pressed="true"] { color:var(--codeos-accent); background:var(--codeos-soft); }
+
+/* Notebook cells: prose reads as a document; executable inputs keep an editor surface. */
+.immersive-lab { --notebook-code-bg:color-mix(in srgb,var(--codeos-ink) 5%,var(--codeos-surface)); }
+.immersive-lab .lab-cell-input { border:1px solid transparent; border-left:3px solid transparent; border-radius:4px; background:transparent; }
+.immersive-lab .lab-cell.active > .lab-cell-input { border-color:transparent; border-left-color:var(--codeos-accent-border,#6e9cc5); }
+.immersive-lab .lab-cell:focus-within > .lab-cell-input { border-left-color:var(--codeos-accent,#397eb8); }
+.immersive-lab .lab-cell-gutter,.immersive-lab .lab-cell-actions { border:0; background:transparent; }
+.immersive-lab .lab-cell-gutter { padding-top:12px; }
+.immersive-lab .cell-type-label { border:0; padding:2px 0; background:transparent; font-size:10px; font-weight:500; }
+.immersive-lab .lab-cell-code .lab-cell-body,.immersive-lab .lab-cell-raw .lab-cell-body { overflow:hidden; border:1px solid var(--codeos-border); border-radius:5px; background:var(--notebook-code-bg); }
+.immersive-lab .lab-cell-code .cm-editor,.immersive-lab .lab-cell-raw .cm-editor { background:var(--notebook-code-bg); }
+.immersive-lab .lab-cell-code:focus-within .lab-cell-body,.immersive-lab .lab-cell-raw:focus-within .lab-cell-body { border-color:var(--codeos-accent-border,#6e9cc5); }
+.immersive-lab .lab-cell-markdown .lab-cell-gutter .cell-type-label { opacity:0; }
+.immersive-lab .lab-cell-markdown:is(:hover,:focus-within,.active) .cell-type-label { opacity:1; }
+.immersive-lab .lab-markdown-cell { position:relative; }
+.immersive-lab .lab-markdown-mode { min-height:32px; padding:2px 8px; border:0; background:transparent; font-size:11px; }
+.immersive-lab .is-reading .lab-markdown-mode { position:absolute; z-index:1; right:4px; top:0; opacity:0; pointer-events:none; }
+.immersive-lab .is-reading .lab-markdown-mode > span { display:none; }
+.immersive-lab .lab-cell-markdown:is(:hover,:focus-within) .is-reading .lab-markdown-mode { opacity:1; pointer-events:auto; }
+.immersive-lab .is-reading .lab-markdown-mode:focus-within { opacity:1; pointer-events:auto; }
+.immersive-lab .lab-markdown-reading { border-radius:4px; }
+.immersive-lab .lab-markdown-reading:focus-visible { outline:2px solid var(--codeos-accent-border,#6e9cc5); outline-offset:2px; }
+.immersive-lab .lab-markdown-reading .lab-markdown-preview { padding:8px 14px 12px; border:0; background:transparent; font-size:14px; line-height:1.75; overflow-wrap:anywhere; }
+.immersive-lab .lab-markdown-reading .lab-markdown-preview > :first-child { margin-top:0; }
+.immersive-lab .lab-markdown-reading .lab-markdown-preview > :last-child { margin-bottom:0; }
+.immersive-lab .lab-markdown-preview h1 { font-size:26px; line-height:1.3; margin:24px 0 14px; }
+.immersive-lab .lab-markdown-preview :is(h2,h3,h4) { margin:22px 0 10px; line-height:1.4; }
+.immersive-lab .lab-markdown-preview p { margin:0 0 12px; }
+.immersive-lab .lab-markdown-preview :is(ul,ol) { margin:10px 0 16px; padding-left:26px; }
+.immersive-lab .lab-markdown-preview li { margin:4px 0; }
+.immersive-lab .lab-markdown-preview li > p { margin:4px 0; }
+.immersive-lab .lab-markdown-preview hr { margin:24px 0; border:0; border-top:1px solid var(--codeos-border); }
+.immersive-lab .lab-markdown-preview pre { border:1px solid var(--codeos-border); border-radius:5px; font:12px/1.65 var(--font-mono); }
+.immersive-lab .is-editing { border:1px solid var(--codeos-border); border-radius:5px; overflow:hidden; }
+.immersive-lab .is-editing .lab-markdown-mode { border-bottom:1px solid var(--codeos-border); }
+.immersive-lab .lab-markdown-cell [hidden] { display:none; }
+
+/* Folder filters and compact file rows form one optional directory. */
+.immersive-codelab .immersive-lab > .lab-folder-pane { grid-area:folders; }
+.immersive-codelab .immersive-lab > .lab-notes-pane { grid-area:notes; }
+.immersive-codelab .immersive-lab > .lab-workspace { grid-area:editor; height:auto; min-height:0; }
+.immersive-codelab .immersive-lab.directory-open > .lab-folder-pane { border-radius:12px 12px 0 0; border-bottom:0; margin-top:4px; overflow:auto; }
+.immersive-codelab .immersive-lab.directory-open > .lab-notes-pane { border-radius:0 0 12px 12px; }
+.immersive-codelab .immersive-lab.directory-open > .lab-workspace { margin-top:4px; }
+.immersive-lab .lab-notes-pane .lab-notebook-row { min-height:52px; margin:2px 0; padding:7px 8px; border:0; border-radius:6px; background:transparent; }
+.immersive-lab .lab-notes-pane .lab-notebook-row:hover,.immersive-lab .lab-notes-pane .lab-notebook-row.active { background:var(--codeos-selected); }
+.immersive-lab .lab-notes-pane .lab-notebook-row-icon { background:transparent; }
+.immersive-lab .lab-notes-pane .lab-notebook-row-copy { gap:2px; }
+.immersive-lab .lab-notebook-rename { opacity:0; }
+.immersive-lab .lab-notebook-row:is(:hover,:focus-within) .lab-notebook-rename { opacity:1; }
+@media (hover:none) { .immersive-lab .lab-notebook-rename,.immersive-lab .is-reading .lab-markdown-mode { opacity:1; pointer-events:auto; } }
+@media (max-width:800px) { .immersive-codelab .immersive-lab.directory-open > .lab-folder-pane { margin-top:0; } }
+
+.lab-prediction {
+  margin: 12px 42px 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--codeos-border, #dfe2d4);
+  border-radius: 10px;
+  background: var(--codeos-soft, #f4f6f0);
+}
+.lab-prediction label { display: flex; align-items: baseline; gap: 10px; font-size: 13px; font-weight: 650; }
+.lab-prediction label span { font-weight: 400; color: var(--codeos-muted, #667164); }
+.lab-prediction textarea {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+  padding: 9px 10px;
+  resize: vertical;
+  border: 1px solid var(--codeos-border, #dfe2d4);
+  border-radius: 6px;
+  background: var(--codeos-surface, #fffef8);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+.lab-prediction p { margin: 10px 0 0; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.lab-prediction strong { display: block; font-weight: 650; }
+.lab-prediction textarea:focus-visible { outline: 2px solid var(--codeos-accent, #347552); outline-offset: 2px; }

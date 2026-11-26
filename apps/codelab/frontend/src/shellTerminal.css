@@ -1,0 +1,43 @@
+.shell-terminal {
+  min-width: 0;
+  background: #171b1e;
+  color: #e3e9e5;
+  border: 1px solid #38423d;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.shell-terminal > header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #38423d;
+  font: 13px/1.5 Menlo, Consolas, monospace;
+}
+.shell-terminal small { color: #a3b3aa; margin-inline-start: 12px; }
+.shell-terminal button {
+  padding: 4px 8px;
+  margin-inline-start: 6px;
+  border: 1px solid #52695a;
+  border-radius: 5px;
+  background: transparent;
+  color: #e3e9e5;
+  font-size: 12px;
+}
+.shell-terminal button:hover:enabled { background: #314339; }
+.shell-terminal-screen { height: clamp(300px, 53dvh, 620px); padding: 12px; }
+.shell-terminal > footer { padding: 8px 14px; color: #a3b3aa; font-size: 11px; }
+.shell-terminal-error { padding: 8px 14px; color: #f1b8ad; font-size: 13px; }
+.experiment-workspace-shell .experiment-title > span { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.experiment-workspace-shell .experiment-title textarea {
+  min-height: 32px;
+  padding: 2px 0;
+  border-color: transparent;
+  background: transparent;
+  resize: none;
+  font-size: 18px;
+}
+.experiment-shell-script { margin-block:14px; font-size:13px; }
+.experiment-shell-script summary { cursor:pointer; color:var(--color-text-secondary); margin-bottom:8px; }

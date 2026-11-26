@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+release_dir=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+project_dir=$(CDPATH='' cd -- "$release_dir/../.." && pwd)
+exec docker compose --project-directory "$project_dir" --env-file "$release_dir/install.env" \
+    -f "$release_dir/compose.yml" "$@"

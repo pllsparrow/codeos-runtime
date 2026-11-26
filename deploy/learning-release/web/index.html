@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CodeOS Learning</title>
+  <link rel="stylesheet" href="/learning-start.css">
+  <script type="module" src="/learning-start.js"></script>
+</head>
+<body>
+  <main>
+    <h1>CodeOS Learning</h1>
+    <form id="login" hidden>
+      <label>Email <input name="email" type="email" autocomplete="username" required></label>
+      <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+      <button type="submit">Sign in</button>
+    </form>
+    <nav id="workspaces" aria-label="Learning workspaces" hidden>
+      <a href="/learning/paths/python-experiments">Python Experiments</a>
+      <a href="/writing/">Notes</a>
+      <a href="/codelab/jupy">Notebooks</a>
+      <a href="/learning/mentor/">Mentor</a>
+      <button id="logout" type="button">Sign out</button>
+    </nav>
+    <p id="status" role="status">Checking session…</p>
+  </main>
+</body>
+</html>

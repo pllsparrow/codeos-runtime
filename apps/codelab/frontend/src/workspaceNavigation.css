@@ -1,0 +1,11 @@
+/* Product navigation stays visible while the workspace owns its scrolling. */
+.codelab-shell { min-height:0; }
+.codelab-shell > .codelab-workspace { min-width:0; }
+.codelab-shell > .experiment-lab-shell { overflow:auto; }
+.codelab-shell .lab-workbar > .typing-brand,
+.codelab-shell .oj-workspace-header > .typing-brand { display:none; }
+@media(max-width:760px) {
+  .codelab-shell.immersive-codelab > .lab-workspace-shell { overflow:auto; }
+  .codelab-shell.immersive-codelab .oj-workspace { min-height:100%; }
+  .codelab-shell.immersive-codelab .oj-workspace .acm-problem-sidebar { position:absolute; top:44px; }
+}

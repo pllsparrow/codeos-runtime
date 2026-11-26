@@ -1,0 +1,6 @@
+.career-navigation-brand { display:inline-flex; align-items:center; gap:10px; }
+.career-navigation-brand strong { font-size:21px; font-weight:700; letter-spacing:-.5px; }
+.career-navigation-brand > svg { color:var(--codeos-accent); }
+.career-learning-return { display:inline-flex; align-items:center; gap:7px; padding:8px 10px; border-radius:9px; font-size:12px; white-space:nowrap; }
+.career-learning-return:hover { background:var(--codeos-soft); }
+@media(max-width:680px) { .career-product-navigation { padding-bottom:9px; } .career-navigation-brand strong { font-size:19px; } }

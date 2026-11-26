@@ -1,6 +1,12 @@
 .env
 .env.*
 !.env.example
+/install.env
+/deploy/learning-release/install.env
+*.dump
 __pycache__/
 *.pyc
+node_modules/
+dist/
+.design-editor/
 .DS_Store

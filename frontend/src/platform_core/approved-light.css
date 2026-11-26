@@ -1,0 +1,35 @@
+/* Approved light tokens; the new dark appearance remains a separate design. */
+:root:not([data-theme="dark"]) {
+  --codeos-bg:#f4f4ef; --codeos-surface:#fffef9; --codeos-soft:#f0efe5;
+  --codeos-ink:#2c342f; --codeos-muted:#656e63; --codeos-border:#e0dfd3;
+  --codeos-accent:#3d7656; --codeos-accent-fill:#32714e; --codeos-on-accent:#fff;
+  --codeos-accent-border:#b8cbb4; --codeos-selected:#e7eee4;
+}
+.codelab-shell { display:flex; flex-direction:column; height:100dvh; overflow:hidden; }
+.codelab-shell > .codelab-workspace { flex:1; min-height:0; }
+.codelab-shell > .codelab-workspace.lab-workspace-shell,.codelab-shell.has-lesson-context > .codelab-workspace.lab-workspace-shell { height:auto; min-height:0; }
+.codelab-shell > .codelab-entry-shell { overflow:auto; }
+.codelab-shell > .lesson-context { flex-shrink:0; height:auto; min-height:45px; }
+:root:not([data-theme="dark"]) .lab-jupy-layout { background:#f4f4ef; }
+:root:not([data-theme="dark"]) .lab-folder-pane,:root:not([data-theme="dark"]) .lab-notes-pane { background:#f5f3e8; }
+:root:not([data-theme="dark"]) .lab-workspace { background:#f4f4ef; }
+:root:not([data-theme="dark"]) .lab-cell { border-color:#e0dfd3; border-radius:14px; background:#fffef9; overflow:hidden; }
+:root:not([data-theme="dark"]) .lab-cell.active { border-color:#b8cbb4; box-shadow:0 0 0 2px #e7eee4; }
+:root:not([data-theme="dark"]) .lab-notebook-row { background:#fffef9; }
+:root:not([data-theme="dark"]) .lab-directory-search,:root:not([data-theme="dark"]) .lab-notebook-row-icon { border-radius:9px; }
+:root:not([data-theme="dark"]) .oj-workspace { background:#f4f4ef; }
+:root:not([data-theme="dark"]) .oj-code-header,:root:not([data-theme="dark"]) .acm-editor-toolbar { background:#fffef9; }
+:root:not([data-theme="dark"]) .acm-workspace button { border-radius:9px; }
+:root:not([data-theme="dark"]) .acm-detail-section,:root:not([data-theme="dark"]) .oj-feedback { border-radius:12px; }
+:root:not([data-theme="dark"]) .career-directory { border-top:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
+:root:not([data-theme="dark"]) .career-directory-row { position:relative; display:flex; align-items:flex-start; flex-direction:column; gap:18px; border:1px solid #e0dfd3; border-radius:18px; padding:28px; background:#fffef9; box-shadow:0 6px 24px #484b3409; }
+:root:not([data-theme="dark"]) .career-directory-row:hover { border-color:#b8cbb4; }
+:root:not([data-theme="dark"]) .career-directory-arrow { position:absolute; top:32px; right:24px; }
+:root:not([data-theme="dark"]) .career-directory-icon { border-radius:14px; }
+:root:not([data-theme="dark"]) .career-directory-applications { --directory-accent:#84602b; --directory-tint:#f4ecd9; }
+:root:not([data-theme="dark"]) .career-directory-jobmail { --directory-accent:#65649a; --directory-tint:#eeecf6; }
+:root:not([data-theme="dark"]) .career-local-nav { margin:0 18px; padding:10px 20px; border:1px solid #e0dfd3; border-radius:12px; background:#fffef9; }
+:root:not([data-theme="dark"]) .live-overview,:root:not([data-theme="dark"]) .rhythm-card,:root:not([data-theme="dark"]) .workspace-card { border-radius:18px; }
+@media(max-width:800px) { :root:not([data-theme="dark"]) .career-directory{grid-template-columns:1fr;} .codelab-shell > .codelab-workspace.lab-workspace-shell { overflow:auto; } }
+
+.codelab-shell .lab-jupy-layout .lab-workspace { min-height:0; }

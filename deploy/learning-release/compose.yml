@@ -1,0 +1,221 @@
+name: codeos-learning
+
+services:
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: codeos_learning
+      POSTGRES_USER: learning_admin
+      POSTGRES_PASSWORD: ${LEARNING_DATABASE_PASSWORD:?run init.py}
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U learning_admin -d codeos_learning"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  setup:
+    build:
+      context: .
+      dockerfile: deploy/learning-release/service.Dockerfile
+      target: setup
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      LEARNING_SETUP_DSN: postgresql://learning_admin:${LEARNING_DATABASE_PASSWORD:?run init.py}@database/codeos_learning
+      LEARNING_CODELAB_PASSWORD: ${LEARNING_CODELAB_PASSWORD:?run init.py}
+      LEARNING_MENTOR_PASSWORD: ${LEARNING_MENTOR_PASSWORD:?run init.py}
+
+  owner-auth:
+    build:
+      context: .
+      dockerfile: deploy/learning-release/service.Dockerfile
+      target: auth
+    environment:
+      CODEOS_OWNER_EMAIL: ${CODEOS_OWNER_EMAIL:?run init.py}
+      CODEOS_OWNER_PASSWORD_HASH: ${CODEOS_OWNER_PASSWORD_HASH:?run init.py}
+      CODEOS_SESSION_STATE_DIR: /session
+    volumes:
+      - sessions:/session
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/auth/session', timeout=2)"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  codelab-api:
+    build:
+      context: .
+      dockerfile: apps/codelab/backend/Dockerfile
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+      codelab-runner:
+        condition: service_healthy
+    environment:
+      CODELAB_DATABASE_URL: postgresql://codelab_app:${LEARNING_CODELAB_PASSWORD:?run init.py}@database/codeos_learning
+      CODELAB_DATABASE_SCHEMA: practice
+      CODELAB_JUDGE_URL: http://codelab-runner:8003
+      CODELAB_JUDGE_TOKEN: ${LEARNING_JUDGE_TOKEN:?run init.py}
+      CODELAB_CONTENT_ROOT: /library
+    volumes:
+      - ./deploy/learning-release/sample:/library:ro
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/api/codelab/ready', timeout=2)"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  mentor:
+    build:
+      context: .
+      dockerfile: apps/mentor/backend/Dockerfile
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+      codelab-api:
+        condition: service_healthy
+    environment:
+      MENTOR_DATABASE_URL: postgresql://mentor_app:${LEARNING_MENTOR_PASSWORD:?run init.py}@database/codeos_learning
+      MENTOR_DATABASE_SCHEMA: learning
+      MENTOR_CODELAB_URL: http://codelab-api:8001
+      MENTOR_REVIEWS_ENABLED: "true"
+      MENTOR_REVIEW_INTERNAL_TOKEN: ${LEARNING_REVIEW_TOKEN:?run init.py}
+      MENTOR_MODEL_URL: ${MENTOR_MODEL_URL:-}
+      MENTOR_MODEL_KEY: ${MENTOR_MODEL_KEY:-}
+      MENTOR_MODEL: ${MENTOR_MODEL:-}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8103/readyz', timeout=2)"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  site:
+    build:
+      context: .
+      dockerfile: deploy/learning-release/site.Dockerfile
+    ports:
+      - "127.0.0.1:${LEARNING_PORT:-18080}:8080"
+    environment:
+      LEARNING_REVIEW_TOKEN: ${LEARNING_REVIEW_TOKEN:?run init.py}
+    depends_on:
+      owner-auth:
+        condition: service_healthy
+      codelab-api:
+        condition: service_healthy
+      codelab-lab:
+        condition: service_healthy
+      mentor:
+        condition: service_healthy
+    networks: [default, notebook_runtime]
+    restart: unless-stopped
+
+  codelab-runner:
+    build: &runner_build
+      context: .
+      dockerfile: apps/codelab/runner/Dockerfile
+    image: codeos-learning-runner:local
+    init: true
+    restart: unless-stopped
+    depends_on:
+      codelab-runner-worker:
+        condition: service_started
+    environment:
+      CODELAB_JUDGE_TOKEN: ${LEARNING_JUDGE_TOKEN:?run init.py}
+      CODEOS_RUNNER_WORKER_SOCKET: /run/codeos-runner/worker.sock
+    user: "10001:10000"
+    volumes:
+      - codelab_runner_socket:/run/codeos-runner
+    expose:
+      - "8003"
+    read_only: true
+    tmpfs:
+      - /tmp:size=8m
+    cap_drop: ["ALL"]
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8003/internal/judge/ready', timeout=2)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  codelab-runner-worker:
+    build: *runner_build
+    image: codeos-learning-runner:local
+    environment:
+      CODEOS_RUNNER_MODE: worker
+      CODEOS_RUNNER_WORKER_SOCKET: /run/codeos-runner/worker.sock
+    user: "0:0"
+    volumes:
+      - codelab_runner_socket:/run/codeos-runner
+    network_mode: none
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,mode=0711,nosuid,nodev,exec
+    cap_drop: ["ALL"]
+    cap_add: ["CHOWN", "KILL", "SETGID", "SETUID"]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 768m
+    cpus: 1.0
+
+  codelab-lab:
+    build:
+      context: .
+      dockerfile: apps/codelab/lab/Dockerfile
+    user: "10001:10001"
+    init: true
+    restart: unless-stopped
+    networks: [notebook_runtime]
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,mode=1777,nosuid,nodev
+      - /home/codelab:size=32m,uid=10001,gid=10001,mode=0700,nosuid,nodev
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 64
+    mem_limit: 768m
+    cpus: 1.0
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8888/jupyter/api/status', timeout=2)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    volumes:
+      - codelab_lab_workspace:/workspace
+    expose:
+      - "8888"
+    command:
+      - python
+      - start.py
+      - --host
+      - 0.0.0.0
+      - --workspace
+      - /workspace
+      - --origin-pattern
+      - ^http://(localhost|127\.0\.0\.1)(:[0-9]+)?$$
+
+networks:
+  notebook_runtime:
+    internal: true
+
+volumes:
+  database:
+  sessions:
+  codelab_runner_socket:
+  codelab_lab_workspace:

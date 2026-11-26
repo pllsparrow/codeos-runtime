@@ -1,0 +1,29 @@
+.platform-study-rhythm-card {
+  min-width: 214px;
+  padding: 13px 14px;
+  border: 1px solid var(--codeos-border, #d5e0e2);
+  border-radius: 11px;
+  color: var(--codeos-ink, #31434b);
+  background: var(--codeos-surface, #fff);
+  display: grid;
+  gap: 11px;
+  text-align: left;
+  box-shadow: 0 10px 24px #34424b12;
+}
+
+.platform-study-rhythm-summary { min-width: 0; display: grid; grid-template-columns: 31px minmax(0, 1fr); align-items: center; gap: 10px; }
+.platform-study-rhythm-icon { width: 31px; height: 31px; border-radius: 9px; color: var(--codeos-accent, #a17d3b); background: var(--codeos-selected, #f3ead9); display: grid; place-items: center; }
+.platform-study-rhythm-copy { min-width: 0; display: grid; gap: 4px; }
+.platform-study-rhythm-copy small { color: var(--codeos-muted, #7f8e94); font: 8px/1.2 var(--font-mono, "SFMono-Regular", Consolas, monospace); letter-spacing: .06em; }
+.platform-study-rhythm-copy strong { display: inline-flex; align-items: center; gap: 4px; color: var(--codeos-ink, #31434b); font-size: 11px; }
+.platform-study-rhythm-copy strong svg { color: var(--codeos-accent, #c3863a); }
+.platform-study-rhythm-copy em { overflow: hidden; color: var(--codeos-muted, #7c8a90); font-size: 9px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
+.platform-study-rhythm-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+.platform-study-rhythm-day { min-width: 0; display: grid; justify-items: center; gap: 4px; color: var(--codeos-muted, #9aa6aa); font: 8px/1 var(--font-mono, "SFMono-Regular", Consolas, monospace); }
+.platform-study-rhythm-day i { width: 13px; height: 13px; border: 1px solid var(--codeos-border, #d7e0e1); border-radius: 50%; background: var(--codeos-soft, #f5f8f8); }
+.platform-study-rhythm-day.is-active { color: var(--codeos-muted, #528e83); }
+.platform-study-rhythm-day.is-active i { border-color: var(--codeos-border, #7eafa5); background: var(--codeos-selected, #b9dcd4); }
+
+@media (max-width: 520px) {
+  .platform-study-rhythm-card { min-width: 0; }
+}

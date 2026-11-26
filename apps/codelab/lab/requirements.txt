@@ -1,0 +1,2 @@
+jupyter_server>=2.17,<3
+ipykernel>=6.29,<7

@@ -1,0 +1,9 @@
+.theme-control { margin-left: auto; display: inline-flex; flex-shrink: 0; gap: 3px; padding: 4px; border: 1px solid var(--codeos-border, #dbe3e7); border-radius: 10px; background: var(--codeos-soft, #f7f9fa); }
+.theme-control button { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 6px 9px; border: 1px solid transparent; border-radius: 6px; color: var(--codeos-muted, #6d7d86); background: transparent; font: inherit; font-size: 11px; font-weight: 500; cursor: pointer; }
+.theme-control button:hover { color: var(--codeos-ink, #26343d); background: var(--codeos-surface, #ffffff); }
+.theme-control button[aria-pressed="true"] { color: var(--codeos-accent, #54758f); background: var(--codeos-surface, #ffffff); border-color: var(--codeos-border, #dbe3e7); box-shadow: 0 1px 3px #0000000a; }
+.theme-control + .workspace-chip { margin-left: 0; padding-inline: 14px; }
+
+.theme-control:focus-within { outline: none; }
+.theme-control button:focus-visible { outline: 2px solid var(--codeos-accent, #54758f); outline-offset: 2px; }
+@media (max-width: 600px) { .theme-control button span { display: none; } .theme-control button { padding: 6px; } }

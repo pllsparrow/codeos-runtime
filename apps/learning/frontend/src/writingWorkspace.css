@@ -1,0 +1,733 @@
+.writing-workspace {
+  height: 100dvh;
+  background: var(--learning-bg);
+  color: var(--learning-text);
+  display: flex;
+  flex-direction: column;
+  font:
+    14px/1.6 Inter,
+    system-ui,
+    sans-serif;
+}
+.writing-workspace * {
+  box-sizing: border-box;
+}
+.writing-workspace button,
+.writing-workspace input,
+.writing-workspace textarea {
+  font: inherit;
+}
+.writing-workspace button {
+  border: 1px solid var(--learning-border);
+  border-radius: 8px;
+  padding: 7px 11px;
+  background: var(--learning-surface);
+  color: inherit;
+  cursor: pointer;
+}
+.writing-workspace button:hover:not(:disabled) {
+  border-color: var(--learning-teal);
+  background: var(--learning-surface-hover, var(--learning-bg));
+}
+.writing-workspace button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.writing-workspace :is(button, input, textarea, summary, a):focus-visible {
+  outline: 2px solid var(--learning-teal);
+  outline-offset: 3px;
+}
+.writing-topbar {
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--learning-border);
+  background: var(--learning-surface);
+}
+.writing-topbar a {
+  color: var(--learning-muted);
+  text-decoration: none;
+  font-size: 12px;
+}
+.writing-topbar .writing-brand {
+  font-size: 20px;
+  font-weight: 750;
+  color: var(--learning-text);
+  letter-spacing: -0.8px;
+}
+.writing-brand span {
+  border-left: 1px solid var(--learning-border);
+  margin-left: 16px;
+  padding-left: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--learning-muted);
+}
+.writing-document-state {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--learning-muted);
+}
+.writing-topbar > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.writing-topbar > button:nth-child(2) {
+  display: none;
+}
+.writing-topbar .writing-publish {
+  background: var(--learning-teal);
+  border-color: var(--learning-teal);
+  color: var(--learning-surface);
+}
+.writing-layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 220px 300px minmax(0, 1fr);
+}
+.writing-navigation {
+  overflow: auto;
+  border-right: 1px solid var(--learning-border);
+  padding: 30px 16px;
+  background: var(--learning-surface);
+}
+.writing-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  font-weight: 650;
+  color: var(--learning-muted);
+}
+.writing-navigation h1 {
+  font-size: 26px;
+  margin: 8px 8px 24px;
+  letter-spacing: -1px;
+}
+.writing-navigation nav {
+  display: grid;
+  gap: 6px;
+}
+.writing-navigation nav button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  border-color: transparent;
+  background: transparent;
+  padding: 10px;
+}
+.writing-navigation nav button small {
+  margin-left: auto;
+  color: var(--learning-muted);
+}
+.writing-navigation nav button.active {
+  background: var(--learning-bg);
+  border-color: var(--learning-border);
+  font-weight: 650;
+  color: var(--learning-teal);
+}
+.writing-role-description {
+  font-size: 12px;
+  color: var(--learning-muted);
+  padding: 0 10px;
+  margin: 18px 0 28px;
+}
+.writing-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 8px;
+}
+.writing-section-heading button {
+  padding: 3px;
+  border: 0;
+  background: transparent;
+  display: flex;
+}
+.writing-collection-row {
+  display: flex;
+  align-items: center;
+}
+.writing-workspace .writing-collection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-color: transparent;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  font-size: 12px;
+  margin: 3px 0;
+}
+.writing-collection img,
+.writing-collection svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.writing-collection span {
+  flex: 1;
+}
+.writing-collection small {
+  font-size: 9px;
+}
+.writing-workspace .writing-collection[aria-pressed="true"] {
+  background: var(--learning-bg);
+  border-color: var(--learning-border);
+  color: var(--learning-teal);
+}
+.writing-collection-row > button:last-child {
+  border: 0;
+  background: transparent;
+  padding: 5px;
+}
+.writing-workspace .writing-archive {
+  margin-top: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--learning-muted);
+  font-size: 12px;
+}
+.writing-storage-note {
+  display: block;
+  color: var(--learning-muted);
+  font-size: 10px;
+  padding: 8px 10px;
+}
+.writing-library {
+  min-width: 0;
+  padding: 28px 16px 16px;
+  overflow: auto;
+  border-right: 1px solid var(--learning-border);
+}
+.writing-library-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+.writing-library h2 {
+  font-size: 18px;
+  line-height: 1.4;
+  margin: 8px 0;
+}
+.writing-library-title > button {
+  padding: 7px;
+  display: flex;
+}
+.writing-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--learning-border);
+  background: var(--learning-surface);
+  padding: 9px 10px;
+  border-radius: 9px;
+  color: var(--learning-muted);
+}
+.writing-search input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--learning-text);
+  width: 100%;
+  min-width: 0;
+  font-size: 12px;
+}
+.writing-search button {
+  border: 0;
+  padding: 0;
+  display: flex;
+}
+.writing-global-search {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+  color: var(--learning-muted);
+  margin: 12px 0 24px;
+}
+.writing-list h3 {
+  font-size: 10px;
+  color: var(--learning-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 24px 0 9px;
+}
+.writing-workspace .writing-list > button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 13px 12px;
+  border-color: transparent;
+  background: transparent;
+  margin: 3px 0;
+}
+.writing-list > button strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.writing-list > button span {
+  display: block;
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--learning-muted);
+  margin-top: 6px;
+}
+.writing-workspace .writing-list > button.selected {
+  background: var(--learning-surface);
+  border-color: var(--learning-border);
+  box-shadow: inset 3px 0 var(--learning-teal);
+}
+.writing-list > p {
+  font-size: 12px;
+  color: var(--learning-muted);
+}
+.writing-library-refresh {
+  margin-top: 24px;
+  width: 100%;
+  font-size: 11px !important;
+}
+.writing-editor-panel {
+  min-width: 0;
+  overflow: auto;
+  padding: 32px clamp(20px, 4vw, 72px) 100px;
+  scrollbar-gutter: stable;
+}
+.writing-paper {
+  max-width: 960px;
+  min-height: 75vh;
+  margin: 0 auto;
+  padding: 36px clamp(24px, 4vw, 64px) 80px;
+  background: var(--learning-surface);
+  border: 1px solid var(--learning-border);
+  border-radius: 14px;
+  box-shadow: 0 5px 28px #15251c06;
+}
+.writing-manuscript-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  color: var(--learning-muted);
+  font-size: 11px;
+}
+.writing-manuscript-meta a {
+  color: var(--learning-teal);
+}
+.writing-title-label {
+  display: block;
+  font-size: 11px;
+  color: var(--learning-muted);
+  margin: 24px 0;
+}
+.writing-title-label input {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 30px !important;
+  font-weight: 650;
+  letter-spacing: -0.8px;
+  color: var(--learning-text);
+  padding: 8px 0;
+}
+.writing-paper .cm-editor {
+  background: transparent;
+}
+.writing-destination {
+  font-size: 12px;
+  margin-bottom: 28px;
+  color: var(--learning-muted);
+  border-bottom: 1px solid var(--learning-border);
+  padding-bottom: 16px;
+}
+.writing-destination summary {
+  cursor: pointer;
+}
+.writing-destination > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+.writing-workspace [aria-pressed="true"] {
+  color: var(--learning-teal);
+  border-color: var(--learning-teal);
+}
+.writing-welcome {
+  max-width: 720px;
+  margin: 12vh auto;
+}
+.writing-welcome h2 {
+  font-size: 38px;
+  letter-spacing: -1.4px;
+  margin: 14px 0;
+}
+.writing-welcome p {
+  color: var(--learning-muted);
+  line-height: 1.85;
+}
+.writing-welcome > div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 32px 0;
+}
+.writing-welcome button {
+  text-align: left;
+  padding: 22px 16px;
+}
+.writing-welcome button strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.writing-welcome button span {
+  font-size: 12px;
+  color: var(--learning-muted);
+}
+.writing-alert {
+  border: 1px solid var(--learning-border);
+  border-left: 3px solid #b47737;
+  background: var(--learning-surface);
+  padding: 18px 22px;
+  max-width: 960px;
+  margin: 0 auto 20px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+.writing-alert button {
+  margin: 10px 7px 0 0;
+}
+.writing-message {
+  max-width: 960px;
+  margin: 0 auto 20px;
+  color: var(--learning-teal);
+  font-size: 12px;
+}
+.writing-structure > label {
+  display: block;
+  margin: 22px 0;
+  font-size: 12px;
+  color: var(--learning-muted);
+}
+.writing-structure > label:not(.writing-archive-choice) > :is(input, textarea) {
+  width: 100%;
+  display: block;
+  margin-top: 6px;
+  border: 1px solid var(--learning-border);
+  border-radius: 8px;
+  background: var(--learning-bg);
+  padding: 10px;
+  color: var(--learning-text);
+}
+.writing-structure textarea {
+  min-height: 100px;
+}
+.writing-structure fieldset {
+  border: 1px solid var(--learning-border);
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.writing-structure legend {
+  font-size: 12px;
+  color: var(--learning-muted);
+}
+.writing-structure ol {
+  list-style: none;
+  padding: 0;
+}
+.writing-structure li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--learning-border);
+}
+.writing-structure li > span {
+  width: 22px;
+  font-size: 11px;
+  color: var(--learning-muted);
+}
+.writing-structure li input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid var(--learning-border);
+  border-radius: 6px;
+  background: var(--learning-bg);
+  color: var(--learning-text);
+  padding: 7px;
+}
+.writing-structure li button {
+  display: flex;
+  padding: 7px;
+}
+.writing-existing-entries {
+  display: grid;
+  gap: 7px;
+  margin-top: 14px;
+}
+.writing-archive-choice {
+  display: flex !important;
+  gap: 8px;
+  align-items: center;
+}
+.writing-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #13201966;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.writing-dialog {
+  max-width: 500px;
+  padding: 28px;
+  background: var(--learning-surface);
+  border: 1px solid var(--learning-border);
+  border-radius: 16px;
+  box-shadow: 0 20px 80px #0003;
+}
+.writing-dialog h2 {
+  margin: 0 0 16px;
+}
+.writing-dialog p {
+  color: var(--learning-muted);
+  margin-bottom: 24px;
+}
+.writing-dialog button {
+  margin: 4px;
+}
+.writing-dialog button:last-child {
+  font-weight: 650;
+  border-color: var(--learning-teal);
+}
+@media (max-width: 1200px) {
+  .writing-layout {
+    grid-template-columns: 190px 260px minmax(0, 1fr);
+  }
+  .writing-editor-panel {
+    padding: 24px 16px 80px;
+  }
+  .writing-topbar {
+    padding: 0 16px;
+    gap: 8px;
+  }
+  .writing-topbar > a:last-child {
+    display: none;
+  }
+  .writing-paper {
+    padding: 28px 24px 60px;
+  }
+}
+@media (max-width: 900px) {
+  .writing-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .writing-navigation,
+  .writing-library {
+    display: none;
+  }
+  .writing-topbar > button:nth-child(2) {
+    display: block;
+  }
+  .writing-document-state {
+    font-size: 10px;
+  }
+  .writing-library-open .writing-navigation {
+    display: block;
+    position: fixed;
+    inset: 64px auto 0 0;
+    z-index: 50;
+    width: 190px;
+  }
+  .writing-library-open .writing-library {
+    display: block;
+    position: fixed;
+    inset: 64px auto 0 190px;
+    z-index: 50;
+    width: min(300px, calc(100vw - 190px));
+    background: var(--learning-bg);
+  }
+  .writing-topbar .writing-brand {
+    font-size: 16px;
+  }
+  .writing-brand span {
+    display: none;
+  }
+  .writing-topbar > a:nth-last-child(2) {
+    display: none;
+  }
+  .writing-welcome {
+    margin-top: 8vh;
+  }
+  .writing-welcome > div {
+    grid-template-columns: 1fr;
+  }
+  .writing-title-label input {
+    font-size: 24px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .writing-workspace * {
+    scroll-behavior: auto !important;
+  }
+}
+.writing-related-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 24px;
+}
+.writing-connections,
+.writing-document-actions {
+  border-top: 1px solid var(--learning-border);
+  padding-top: 20px;
+  margin-top: 28px;
+  font-size: 12px;
+}
+.writing-connections summary,
+.writing-document-actions summary {
+  cursor: pointer;
+  color: var(--learning-muted);
+}
+.writing-document-actions button {
+  margin: 14px 8px 0 0;
+}
+.writing-document-actions p {
+  color: var(--learning-muted);
+}
+.writing-practice-lesson {
+  margin: 14px 0;
+  padding: 16px;
+  border: 1px solid var(--learning-border);
+  border-radius: 10px;
+}
+.writing-practice-lesson header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.writing-practice-lesson header strong {
+  flex: 1;
+  font-size: 13px;
+}
+.writing-practice-lesson header button {
+  display: flex;
+  padding: 6px;
+}
+.writing-practice-lesson label,
+.writing-practice-structure details > label {
+  display: block;
+  margin: 16px 0;
+  font-size: 12px;
+  color: var(--learning-muted);
+}
+.writing-practice-lesson :is(input, textarea),
+.writing-practice-structure details > label input {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 9px;
+  border: 1px solid var(--learning-border);
+  border-radius: 7px;
+  background: var(--learning-bg);
+  color: var(--learning-text);
+}
+
+.writing-library-backdrop {
+  display: none;
+}
+@media (max-width: 900px) {
+  .writing-workspace .writing-library-backdrop {
+    display: block;
+    position: fixed;
+    inset: 64px 0 0;
+    z-index: 49;
+    background: #15251c66;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+  }
+}
+
+.writing-workspace {
+  --notes-editor-ink: var(--learning-text);
+  --notes-editor-bg: var(--learning-surface);
+}
+.writing-workspace .writing-manuscript.notes-document {
+  padding: 0;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--learning-text);
+}
+/* A compact library can leave the manuscript in place while its list is hidden. */
+.writing-topbar > button:nth-child(2) {
+  display: inline-flex;
+}
+.writing-layout {
+  grid-template-columns: 200px 260px minmax(0, 1fr);
+}
+.writing-layout.writing-library-collapsed {
+  grid-template-columns: 200px minmax(0, 1fr);
+}
+.writing-library-collapsed .writing-library {
+  display: none;
+}
+.writing-review-details {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--learning-muted);
+}
+.writing-review-details label > input {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--learning-border);
+  border-radius: 8px;
+  background: var(--learning-bg);
+  color: var(--learning-text);
+  padding: 9px;
+  margin-top: 5px;
+}
+.writing-review-details fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+  border: 1px solid var(--learning-border);
+  border-radius: 9px;
+  padding: 12px;
+}
+@media (max-width: 1200px) {
+  .writing-layout {
+    grid-template-columns: 180px 240px minmax(0, 1fr);
+  }
+  .writing-layout.writing-library-collapsed {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+}
+@media (max-width: 900px) {
+  .writing-layout,
+  .writing-layout.writing-library-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .writing-library-open .writing-library {
+    display: block;
+  }
+}

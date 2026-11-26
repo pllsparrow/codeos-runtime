@@ -1,0 +1,52 @@
+/* Shared neutral palette. Daytime declarations retain their original fallbacks. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --codeos-overlay: #00000099;
+  --codeos-bg: #0f0f0f; --codeos-surface: #181818; --codeos-soft: #121212; --codeos-raised: #303030;
+  --codeos-ink: #f1f1f1; --codeos-muted: #aaaaaa; --codeos-border: #3f3f3f;
+  --codeos-accent: #e5e5e5; --codeos-accent-border: #888888; --codeos-selected: #303030;
+  --codeos-accent-fill: #e5e5e5; --codeos-on-accent: #0f0f0f;
+  --codeos-success: #aec8b4; --codeos-success-bg: #29362e;
+  --codeos-warning: #e2c38a; --codeos-warning-bg: #3d3526;
+  --codeos-danger: #e3aaa4; --codeos-danger-bg: #3b2929;
+  --codeos-code-keyword: #c4b5e8; --codeos-code-string: #c9c2a1; --codeos-code-number: #a8c5e7;
+  --codeos-code-comment: #a7a7a2; --codeos-code-function: #dfc197; --codeos-code-type: #b4c9d4;
+  --codeos-code-operator: #bac6d7; --codeos-code-punctuation: #c2c0bc;
+  --color-bg: var(--codeos-bg); --color-surface: var(--codeos-surface); --color-surface-muted: var(--codeos-soft);
+  --color-text: var(--codeos-ink); --color-text-secondary: var(--codeos-muted); --color-text-muted: var(--codeos-muted);
+  --color-border: var(--codeos-border); --color-accent: var(--codeos-accent); --color-accent-hover: #f1f1f1;
+  --color-accent-soft: var(--codeos-selected); --color-accent-border: var(--codeos-accent-border);
+  background: var(--codeos-bg); color: var(--codeos-ink);
+}
+.login-appearance { position: absolute; top: 22px; right: 24px; }
+.app-account .theme-control { margin-left: 0; }
+.theme-control + .codelab-workspace-chip { margin-left: 0; padding-inline: 14px; }
+:root[data-theme="dark"] :is(input, textarea, select) { color-scheme: dark; }
+:root[data-theme="dark"] :is(input, textarea)::placeholder { color: #aaaaaa; opacity: 1; }
+:root[data-theme="dark"] ::selection { background: #515151; color: #ffffff; }
+:root[data-theme="dark"] .cm-editor { color: #f1f1f1; background: #181818; }
+:root[data-theme="dark"] .cm-gutters { color: #aaaaaa; background: #121212; border-color: #3f3f3f; }
+:root[data-theme="dark"] :is(.cm-activeLine, .cm-activeLineGutter) { background: #303030; }
+:root[data-theme="dark"] .cm-editor .cm-selectionBackground,
+:root[data-theme="dark"] .cm-editor.cm-focused .cm-selectionBackground { background: #515151 !important; }
+:root[data-theme="dark"] .cm-cursor { border-left-color: #f1f1f1; }
+@media(max-width: 1100px) {
+  .app-account .app-user, .product-header .workspace-chip, .codelab-global-header .codelab-workspace-chip { display: none; }
+  .app-global-header { padding-inline: 16px; gap: 12px; }
+  .app-account { gap: 10px; }
+  .app-account .theme-control button span { display: none; }
+  .product-header, .codelab-global-header { gap: 18px; padding-inline: 16px; }
+}
+@media(max-width: 650px) {
+  .app-global-header { height: auto; min-height: 58px; grid-template-columns: auto minmax(0, 1fr); padding-block: 8px; }
+  .app-product-nav { grid-row: 2; grid-column: 1 / -1; height: 38px; }
+  .app-account { justify-self: end; }
+  .app-account .app-logout { padding-inline: 8px; }
+  .product-header nav a, .codelab-global-header nav a { min-width: 58px; padding-inline: 9px; }
+  .product-header, .codelab-global-header { gap: 10px; }
+  .login-appearance { right: 16px; top: 16px; }
+  :root { --codelab-header-height: 104px; }
+  .product-header, .codelab-global-header { display: grid; grid-template-columns: auto minmax(0, 1fr); height: auto; min-height: 58px; padding-block: 8px; }
+  .product-header nav, .codelab-global-header nav { grid-row: 2; grid-column: 1 / -1; height: 38px; justify-self: center; }
+  .product-header .theme-control, .codelab-global-header .theme-control { justify-self: end; }
+}

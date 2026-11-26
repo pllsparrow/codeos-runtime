@@ -1,0 +1,179 @@
+.reading-workspace {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: calc(100dvh - 72px);
+  color: var(--learning-text);
+}
+.reading-navigation {
+  padding: 32px 22px;
+  border-right: 1px solid var(--learning-border);
+  background: var(--learning-surface);
+  position: sticky;
+  top: 72px;
+  align-self: start;
+  max-height: calc(100dvh - 72px);
+  overflow: auto;
+}
+.reading-back {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--learning-text);
+  font-size: 15px;
+  font-weight: 650;
+  text-decoration: none;
+  line-height: 1.5;
+  margin-bottom: 34px;
+}
+.reading-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--learning-muted);
+  font-weight: 650;
+}
+.reading-navigation > p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--learning-muted);
+  margin: 14px 0 28px;
+}
+.reading-navigation nav {
+  display: grid;
+  gap: 6px;
+}
+.reading-navigation nav a {
+  display: flex;
+  gap: 9px;
+  padding: 11px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--learning-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.reading-navigation nav a:hover {
+  color: var(--learning-text);
+  background: var(--learning-bg);
+}
+.reading-navigation nav a[aria-current="page"] {
+  background: var(--learning-bg);
+  border-color: var(--learning-border);
+  color: var(--learning-teal);
+  font-weight: 650;
+}
+.reading-navigation nav small {
+  font-size: 10px;
+  padding-top: 2px;
+}
+.reading-library-link {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 28px;
+  color: var(--learning-teal);
+  font-size: 12px;
+  text-decoration: none;
+}
+.reading-content {
+  padding: 32px clamp(24px, 5vw, 80px) 100px;
+  min-width: 0;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+}
+.reading-content .notes-reading-layout {
+  max-width: 1300px;
+  margin: auto;
+}
+.reading-content .notes-document {
+  padding: 32px clamp(28px, 4vw, 60px) 64px;
+}
+.reading-document-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: 11px;
+  color: var(--learning-muted);
+  padding-bottom: 24px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--learning-border);
+}
+.reading-error {
+  padding: 40px;
+  border: 1px solid var(--learning-border);
+  border-radius: 14px;
+  background: var(--learning-surface);
+}
+.reading-error button,
+.reading-error a {
+  display: inline-block;
+  padding: 10px 14px;
+  margin-right: 10px;
+  border: 1px solid var(--learning-border);
+  background: var(--learning-bg);
+  color: var(--learning-teal);
+  border-radius: 8px;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.reading-workspace a:focus-visible,
+.reading-workspace button:focus-visible {
+  outline: 2px solid var(--learning-teal);
+  outline-offset: 3px;
+}
+@media (max-width: 1000px) {
+  .reading-workspace {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  .reading-content {
+    padding: 24px;
+  }
+  .reading-content .notes-reading-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .reading-content .notes-outline {
+    position: static;
+    grid-row: 1;
+    max-height: 220px;
+    overflow: auto;
+  }
+}
+@media (max-width: 720px) {
+  .reading-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .reading-navigation {
+    position: static;
+    max-height: none;
+    padding: 20px;
+    border-right: 0;
+    border-bottom: 1px solid var(--learning-border);
+  }
+  .reading-navigation > p,
+  .reading-navigation > .reading-eyebrow,
+  .reading-library-link {
+    display: none;
+  }
+  .reading-back {
+    margin-bottom: 14px;
+  }
+  .reading-navigation nav {
+    display: flex;
+    overflow: auto;
+  }
+  .reading-navigation nav a {
+    min-width: 180px;
+  }
+  .reading-content {
+    padding: 18px 10px 60px;
+  }
+  .reading-content .notes-document {
+    padding: 24px 22px 50px;
+  }
+}
+
+.reading-content .notes-document :is(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: 90px;
+}

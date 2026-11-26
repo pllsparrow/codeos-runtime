@@ -1,74 +1,111 @@
-# CodeOS Runtime
+# CodeOS — Self-Hosted Programming Learning Workbench & Isolated Execution Runtime
 
-CodeOS Runtime is the Go execution service extracted from CodeOS, a programming
-learning workbench. It runs Python programs and evaluates Go or Python submissions
-against caller-supplied cases. This repository includes the execution service,
-Linux worker, loopback Compose setup, and a synthetic end-to-end example.
+CodeOS combines a **self-hosted programming learning platform** (Courses, Knowledge, Notes,
+Python Notebook Lab, and optional AI evidence review) with a **network-disabled Go code
+execution sandbox** in one repository.
 
-## Browser demo
+- **Live Guest Site (Account-Free)**: [pllsparrow.github.io/codeos-runtime](https://pllsparrow.github.io/codeos-runtime/)
+- **License**: [MIT](LICENSE) (see [Third-Party Notices](THIRD_PARTY_NOTICES.md))
 
-[Try the Python list-copy experiment](https://pllsparrow.github.io/codeos-runtime/).
-Predict which operation changes the original list, compare the results and download
-the Notebook. The page replays output captured from Python during the build.
+---
 
-## Run locally
+## What's Inside
 
-Use Docker with Linux containers and Docker Compose v2, OpenSSL, and Python 3
-to run the example. The build fetches the Go and Python base images and Go modules.
+1. **Public Guest Demo (`docs/`)**: Static, account-free learning showcase with curated
+   articles and static-replay Python micro-experiments (hosted on GitHub Pages).
+2. **Self-Hosted Learning Workbench (`deploy/learning-release/`, `apps/`, `backend/`, `frontend/`)**:
+   - **Courses & Knowledge**: Clean read-only learning surfaces separated from authoring.
+   - **PostgreSQL-Authoritative Notes**: Independent writing space with draft/publish
+     separation, optimistic revision conflict protection, and Markdown export.
+   - **Isolated Python Notebook Lab**: Run Python cells in a network-restricted Jupyter
+     kernel, persist code and outputs to PostgreSQL, reopen saved workspaces, and export
+     standard `.ipynb` files.
+   - **Zero-API-Key Core + Optional Mentor AI**: Core learning and Notebook workflows work
+     completely without LLM credentials; optionally configure any OpenAI-compatible provider
+     (such as Google AI Studio / Gemini) to review saved Notebook runs and Notes.
+3. **Standalone Go Execution Sandbox (root `*.go`, `cmd/`, `compose.yml`)**:
+   - Isolated HTTP runner + network-disabled Linux worker over a Unix domain socket.
+   - Enforces concurrency admission, timeouts, process-group cancellation cleanup, and
+     bounded output limits for Python and Go execution.
 
-```sh
-git clone https://github.com/pllsparrow/codeos-runtime.git
-cd codeos-runtime
-export CODELAB_JUDGE_TOKEN="$(openssl rand -hex 32)"
-docker compose build runner
-docker compose up -d --no-build --pull never --wait
-python3 examples/smoke.py
-docker compose down
-```
-
-The example checks readiness, rejection of a request without a token, a Python
-Run, and Go submissions with passing and failing cases. The endpoint binds to
-`127.0.0.1:18033`. Set `CODEOS_RUNTIME_PORT` in the same shell before startup
-and the example to use a different local port.
-
-For source checks with Go 1.26.6 or newer, run `go test -race ./...` and
-`go vet ./...`. Docker provides the Linux worker needed for real execution.
+---
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    Client["Local client with bearer token"] --> HTTP["Go / Gin HTTP admission"]
-    HTTP -->|"Unix socket"| Worker["Networkless Linux worker"]
-    Worker --> Program["Python or Go program in a per-run workspace"]
-    Program -->|"Bounded output and exit status"| Worker
-    Worker -->|"Execution result"| HTTP
+    Browser --> Gateway[Nginx · loopback only]
+    Gateway --> Auth[Owner session]
+    Gateway --> Learning[Learning & Notebook Web]
+    Gateway --> Codelab[Codelab API · FastAPI]
+    Gateway --> Mentor[Mentor API · FastAPI]
+    Gateway --> Kernel[Jupyter Kernel · private net]
+    Codelab --> DB[(PostgreSQL)]
+    Mentor --> DB
+    Mentor -->|Saved evidence API| Codelab
+    Mentor -.->|Optional OpenAI-compatible call| Provider[LLM Provider]
+    Codelab --> Runner[Go Runner]
+    Runner -->|Unix socket| Worker[Network-disabled Linux Worker]
 ```
 
-- HTTP admission validates the bearer token, request ID and payload before
-  acquiring a slot. The default is one admitted request at a time. Saturation
-  returns HTTP 503. The caller receives the result within the request lifetime.
-- The worker launches programs under a separate UID/GID in per-run workspaces,
-  applies time and output bounds and cleans up the process group. Compose
-  provides a networkless worker, a read-only root, bounded tmpfs, CPU, memory
-  and process limits. Use the loopback setup for trusted local evaluation.
-- Go submissions compile once and run each case in a fresh workspace. Submit
-  reports how many cases passed and the first failure. Run returns stdout,
-  stderr and the execution status.
-- The `Idempotency-Key` header correlates a request with its response.
-  Execution is request-scoped and has no durable queue or deduplication store.
+PostgreSQL, the Jupyter kernel, and the Go Runner/Worker stay on internal container networks
+or a local Unix socket. Executed user code never receives database credentials, application
+secrets, or host filesystem access.
 
-## Scope
+---
 
-This release covers the Runner component. The Notebook UI, learning persistence,
-Mentor and the full CodeOS installation are part of the broader workbench. This
-Compose profile is single-user and supports local execution. A public
-multi-tenant deployment requires its own reviewed execution and access model.
+## Option 1: Run the Full Learning Workbench (Docker)
 
-The export contains selected original source files, their Go module lock
-metadata, the existing unit tests, and a local synthetic example. Go dependencies
-and Docker base images are fetched at build time and retain their own licenses.
+Requires **Docker (Compose v2)** and **Python 3.12+**:
 
-## License
+```sh
+python3 deploy/learning-release/init.py
+deploy/learning-release/learning up --build -d
+```
 
-Original project source is available under the [MIT License](LICENSE).
+Open `http://127.0.0.1:18080/` and sign in with the email and password created during
+`init.py`. Set `LEARNING_PORT` in `deploy/learning-release/install.env` if port `18080` is
+busy.
+
+### Sample Walkthrough
+
+1. Open **Python Experiments → Shared nested lists**, read the lesson, and add a linked note
+   in **Notes**.
+2. Open **Experiment** to launch the Python Notebook, run the cell, change
+   `copy[0].append(99)` to `copy[0] = [99]`, run again, then save and reopen to verify
+   retained code and outputs.
+3. *(Optional)* Configure `MENTOR_MODEL_URL`, `MENTOR_MODEL_KEY`, and `MENTOR_MODEL` in
+   `deploy/learning-release/install.env`, restart with
+   `deploy/learning-release/learning up -d mentor`, and select **Ask Mentor** on a saved run.
+
+---
+
+## Option 2: Run the Standalone Go Execution Sandbox
+
+To evaluate or test only the Go Runner & network-disabled Linux Worker:
+
+```sh
+cp .env.example .env
+docker compose up --build -d
+go test -race ./...
+```
+
+See `examples/` for sample Python and Go execution requests.
+
+---
+
+## Operations, Backup & Restore
+
+- **Status & logs**: `deploy/learning-release/learning ps -a` and
+  `deploy/learning-release/learning logs --tail 100 setup site`
+- **Stop (data retained in named volumes)**: `deploy/learning-release/learning down`
+- **Backup**:
+
+  ```sh
+  umask 077
+  deploy/learning-release/learning exec -T database \
+    pg_dump -U learning_admin -Fc codeos_learning > codeos-learning.dump
+  ```
+
+- **Restore**: Initialize a fresh database to create scoped roles, stop app services, restore
+  with `pg_restore --clean --if-exists --exit-on-error`, and restart.
