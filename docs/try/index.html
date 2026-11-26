@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>在线运行实例 · CodeOS</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="./try.css" />
+  </head>
+  <body class="try-page">
+    <header>
+      <nav aria-label="站点导航">
+        <a class="brand" href="../">CodeOS</a>
+        <div class="try-nav-links">
+          <a href="../#articles">深度文章</a>
+          <a href="../experiments/shallow-copy/">对比实验</a>
+          <a href="https://github.com/pllsparrow/codeos-runtime">GitHub</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="try-main">
+      <section class="try-toolbar" aria-label="示例与运行控制">
+        <div id="example-tabs" class="example-tabs" role="tablist" aria-label="选择代码实例"></div>
+        <div class="try-actions">
+          <button id="reset-btn" class="btn-ghost" type="button">重置代码</button>
+          <button id="run-btn" class="btn-run" type="button">
+            <span>▶ 运行代码</span>
+            <kbd>⌘↵</kbd>
+          </button>
+        </div>
+      </section>
+
+      <section class="try-workspace" aria-label="左右分栏代码运行台">
+        <div class="pane pane-editor">
+          <div class="pane-header">
+            <span id="file-meta" class="file-meta">shallow_copy.py</span>
+            <div id="variant-switch" class="variant-switch" role="group" aria-label="切换写法变体"></div>
+          </div>
+          <div class="editor-shell">
+            <pre id="line-numbers" class="line-numbers" aria-hidden="true">1</pre>
+            <textarea
+              id="code-input"
+              class="code-input"
+              spellcheck="false"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              aria-label="代码编辑器"
+            ></textarea>
+          </div>
+          <div class="pane-footer-hint">
+            <span>支持 Tab 缩进 · Ctrl / Cmd + Enter 一键运行</span>
+            <span>零广告 · 可直接修改代码验证假设</span>
+          </div>
+        </div>
+
+        <div class="pane">
+          <div class="pane-header">
+            <div class="output-badges">
+              <span id="mode-badge" class="status-badge">Python 浏览器实时沙箱</span>
+              <span id="exit-badge" class="status-badge neutral">exit 0</span>
+            </div>
+            <span id="duration-badge">准备就绪</span>
+          </div>
+          <div class="output-body">
+            <pre id="terminal-output" class="terminal-box" aria-live="polite"></pre>
+            <div class="observation-card">
+              <h3 id="observation-title">原理观察点</h3>
+              <div id="observation-body"></div>
+            </div>
+            <div id="sandbox-hint" class="observation-card" hidden>
+              <h3>在本地 Go 断网隔离沙箱中运行自定义代码</h3>
+              <p>克隆 <code>pllsparrow/codeos-runtime</code> 并启动断网 Linux Worker 后，可直接提交任意 Go 代码：</p>
+              <pre class="sandbox-cli">git clone https://github.com/pllsparrow/codeos-runtime.git
+cd codeos-runtime &amp;&amp; cp .env.example .env &amp;&amp; docker compose up --build -d</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./runner.mjs"></script>
+  </body>
+</html>
