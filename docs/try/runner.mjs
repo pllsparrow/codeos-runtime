@@ -171,6 +171,161 @@ worker-2 claimed job #6
       },
     ],
   },
+  {
+    id: "go-panic-recover",
+    title: "Go 跨协程 Panic 隔离",
+    lang: "go",
+    filename: "panic_recover.go",
+    mode: "sandbox-replay",
+    summary: "主协程的 defer recover() 无法捕获子协程 panic，必须在每个 Worker 入口独立兜底。",
+    variants: [
+      {
+        id: "buggy",
+        label: "反例：主协程 recover",
+        code: `package main
+
+import (
+\t"fmt"
+\t"time"
+)
+
+func main() {
+\tdefer func() {
+\t\tif r := recover(); r != nil {
+\t\t\tfmt.Println("主协程试图兜底:", r) // 永远不会执行！
+\t\t}
+\t}()
+
+\tgo func() {
+\t\tpanic("worker nil pointer dereference")
+\t}()
+
+\ttime.Sleep(50 * time.Millisecond)
+\tfmt.Println("服务正常运行")
+}`,
+        fallbackOutput: `panic: worker nil pointer dereference
+
+goroutine 6 [running]:
+main.main.func2()
+\tpanic_recover.go:16 +0x28
+[sandbox] exit_code=2  network=disabled  runtime=go1.23`,
+        observation:
+          "<code>panic</code> 只沿当前 Goroutine 调用栈向上展开，不会跨协程传播给 <code>main</code>。一旦子协程未捕获 <code>panic</code>，整个 Go 进程立即以退出码 2 崩溃。",
+      },
+      {
+        id: "fixed",
+        label: "正例：Worker 内部兜底",
+        code: `package main
+
+import (
+\t"fmt"
+\t"sync"
+)
+
+func safeGo(wg *sync.WaitGroup, fn func()) {
+\twg.Add(1)
+\tgo func() {
+\t\tdefer wg.Done()
+\t\tdefer func() {
+\t\t\tif r := recover(); r != nil {
+\t\t\t\tfmt.Printf("[recovered] worker failed safely: %v\\n", r)
+\t\t\t}
+\t\t}()
+\t\tfn()
+\t}()
+}
+
+func main() {
+\tvar wg sync.WaitGroup
+\tsafeGo(&wg, func() { panic("worker nil pointer dereference") })
+\twg.Wait()
+\tfmt.Println("主服务继续稳定运行")
+}`,
+        fallbackOutput: `[recovered] worker failed safely: worker nil pointer dereference
+主服务继续稳定运行
+[sandbox] exit_code=0  network=disabled  runtime=go1.23`,
+        observation:
+          "通过 <code>safeGo</code> 在每个子协程栈顶独立封装 <code>defer recover()</code>，将单任务异常收敛为结构化错误日志，主进程和其他 Worker 完全不受影响。",
+      },
+    ],
+  },
+  {
+    id: "go-pgid-timeout",
+    title: "Linux 进程组 PGID 超时清理",
+    lang: "go",
+    filename: "pgid_timeout.go",
+    mode: "sandbox-replay",
+    summary: "exec.CommandContext 默认只杀直接子进程；设置 Setpgid 并向负 PGID 广播 SIGKILL 才能清干净孙进程树。",
+    variants: [
+      {
+        id: "buggy",
+        label: "反例：仅杀直接子进程",
+        code: `package main
+
+import (
+\t"context"
+\t"fmt"
+\t"os/exec"
+\t"time"
+)
+
+func main() {
+\tctx, cancel := context.WithTimeout(context.Background(), 150*time.Millisecond)
+\tdefer cancel()
+
+\t// 反例：sh 派生孙进程 sleep 60；超时仅杀 sh，孙进程继续占用 stdout 管道！
+\tcmd := exec.CommandContext(ctx, "sh", "-c", "sleep 60")
+\tstart := time.Now()
+\t_, err := cmd.CombinedOutput()
+\tfmt.Printf("returned after %v, err=%v\\n", time.Since(start).Round(time.Millisecond), err)
+}`,
+        fallbackOutput: `[warning] sh killed at 150ms, but orphan grandchild (sleep 60) still holds stdout pipe!
+returned after 60.002s, err=signal: killed
+[sandbox] exit_code=0  network=disabled  runtime=go1.23`,
+        observation:
+          "<code>CombinedOutput()</code> 会一直读到 stdout 管道 EOF 才返回。孙进程 <code>sleep 60</code> 继承了管道写端且逃逸成孤儿进程，导致父进程明明设了 150ms 超时却硬卡满 60 秒。",
+      },
+      {
+        id: "fixed",
+        label: "正例：Setpgid + 负 PGID 强杀",
+        code: `package main
+
+import (
+\t"context"
+\t"fmt"
+\t"os/exec"
+\t"syscall"
+\t"time"
+)
+
+func main() {
+\tctx, cancel := context.WithTimeout(context.Background(), 150*time.Millisecond)
+\tdefer cancel()
+
+\tcmd := exec.Command("sh", "-c", "sleep 60")
+\tcmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+\tstart := time.Now()
+\t_ = cmd.Start()
+
+\tdone := make(chan error, 1)
+\tgo func() { done <- cmd.Wait() }()
+
+\tselect {
+\tcase <-ctx.Done():
+\t\t_ = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL) // 负 PGID 清理整棵进程树
+\t\t<-done // Wait 回收退出码，防止产生僵尸进程
+\t\tfmt.Printf("process group reaped in %v\\n", time.Since(start).Round(time.Millisecond))
+\tcase err := <-done:
+\t\tfmt.Printf("finished early: %v\\n", err)
+\t}
+}`,
+        fallbackOutput: `process group reaped in 152ms
+[sandbox] exit_code=0  network=disabled  runtime=go1.23`,
+        observation:
+          "这正是 <code>codeos-runtime</code> 沙箱执行器的核心防线：<code>Setpgid: true</code> 把父/子/孙进程收拢进同一进程组，超时后 <code>syscall.Kill(-pid, SIGKILL)</code> 毫秒级全树清零，再 <code>Wait()</code> 彻底杜绝僵尸进程。",
+      },
+    ],
+  },
 ];
 
 const state = {
